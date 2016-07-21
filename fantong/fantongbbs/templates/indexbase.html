@@ -1,0 +1,80 @@
+﻿<!DOCHTML>
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>{% block title %}base{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="indexbase.css"/>
+</head>
+
+<body>
+	<div class="head">
+	
+	</div>
+	<div class="topbar">
+		{% block topbar %}
+		<div id="district">
+			<div class="rowone colone">区域</div>
+			<div class="rowone coltwo">海淀区</div>
+			<div class="rowone colthree">朝阳区</div>
+			<div class="rowone colfour">东城区</div>
+			<div class="rowone colfive">西城区</div>
+			<div class="rowone colsix">丰台区</div>
+			<div class="rowone colseven">石景山区</div>
+			<div class="rowone coleight">大兴区</div>
+			<div class="rowtwo coltwo">通州区</div>
+			<div class="rowtwo colthree">昌平区</div>
+			<div class="rowtwo colfour">房山区</div>
+			<div class="rowtwo colfive">顺义区</div>
+			<div class="rowtwo colsix">门头沟区</div>
+			<div class="rowtwo colseven">怀柔区</div>
+			<div class="rowtwo coleight">平谷区</div>
+			<div class="rowthree coltwo">延庆县</div>
+			<div class="rowthree colthree">密云县</div>
+		</div>
+		<div id="style">
+			<div class="rowfour colone">菜系</div>
+			<div class="rowfour coltwo">火锅</div>
+			<div class="rowfour colthree">自助餐</div>
+			<div class="rowfour colfour">咖啡厅</div>
+			<div class="rowfour colfive">烧烤</div>
+			<div class="rowfour colsix">面包</div>
+			<div class="rowfour colseven">甜点</div>
+			<div class="rowfour coleight">韩国料理</div>
+			<div class="rowfive coltwo">日本菜</div>
+			<div class="rowfive colthree">西餐</div>
+			<div class="rowfive colfour">小吃快餐</div>
+			<div class="rowfive colfive">北京菜</div>
+			<div class="rowfive colsix">江浙菜</div>
+			<div class="rowfive colseven">粤菜</div>
+			<div class="rowfive coleight">清真菜</div>
+			<div class="rowsix coltwo">素菜</div>
+			<div class="rowsix colthree">川菜</div>
+			<div class="rowsix colfour">新疆菜</div>
+			<div class="rowsix colfive">西北菜</div>
+			<div class="rowsix colsix">海鲜</div>
+			<div class="rowsix colseven">东南亚菜</div>
+			<div class="rowsix coleight">家常菜</div>
+			<div class="rowseven coltwo">云南菜</div>
+			<div class="rowseven colthree">贵州菜</div>
+			<div class="rowseven colfour">鲁菜</div>
+			<div class="rowseven colfive">湖北菜</div>
+			<div class="rowseven colsix">东北菜</div>
+			<div class="rowseven colseven">湘菜</div>
+			<div class="rowseven coleight">其他</div>
+		</div>
+		<div id="price">
+			<div class="roweight colone">价位</div>
+			<div class="roweight coltwo">50以下</div>
+			<div class="roweight colthree">50-100</div>
+			<div class="roweight colfour">100-300</div>
+			<div class="roweight colfive">300以上</div>
+		</div>
+		{% end block %}
+	</div>
+	<div class="content">
+		{% block content %}{% endblock %}
+	</div>
+</body>
+
+</html>
