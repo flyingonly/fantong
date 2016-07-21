@@ -24,7 +24,10 @@ class Post(models.Model):
     PContent = models.TextField()
     PTime = models.DateTimeField()
     PLastComTime = models.DateTimeField()
-    PTagLocation = models.CharField(max_length=50)
+    LOCATION_cHOICE = (
+        (u'海淀区', u'海淀区'),
+    )
+    PTagLocation = models.CharField(max_length=50, choices=LOCATION_cHOICE)
     PTagClass = models.CharField(max_length=50)
     PTagPrice = models.CharField(max_length=50)
     PKeywords = models.CharField(max_length=100)
