@@ -134,4 +134,4 @@ EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = 'wang-wy14@mails.tsinghua.edu.cn'
 
 EMAIL_HOST_USER = 'wang-wy14@mails.tsinghua.edu.cn'
-EMAIL_HOST_PASSWORD = 'wwy@31415'
+EMAIL_HOST_PASSWORD = 'temp_password'
