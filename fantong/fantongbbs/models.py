@@ -1,9 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 
-class User(models.Model):
+class BBSUser(models.Model):
     UAccount = models.EmailField()
     UName = models.CharField(max_length=50)
     UPassword = models.CharField(max_length=50)
@@ -13,12 +14,13 @@ class User(models.Model):
     UFollowPostNum = models.IntegerField()
     UPostNum = models.IntegerField()
     UForbidden = models.BooleanField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.UName
 
 
-class Post(models.Model):
+class BBSPost(models.Model):
     PUserID = models.ForeignKey(User)  # 帖子作者关系
     PTitle = models.CharField(max_length=100)
     PContent = models.TextField()
@@ -101,15 +103,15 @@ class FollowUser(models.Model):
 
 class UserReportPost(models.Model):
     UserID = models.ForeignKey(User)
-    PostID = models.ForeignKey(Post)
+    PostID = models.ForeignKey(BBSPost)
     ReportContent = models.TextField()
 
 
 class UserLikePost(models.Model):
     UserID = models.ForeignKey(User)
-    PostID = models.ForeignKey(Post)
+    PostID = models.ForeignKey(BBSPost)
 
 
 class UserFollowPost(models.Model):
     UserID = models.ForeignKey(User)
-    PostID = models.ForeignKey(Post)
+    PostID = models.ForeignKey(BBSPost)
