@@ -15,6 +15,16 @@ def bbs_list(request):
     posts = BBSPost.objects.all()
     return render(request, 'index.html', {'posts': posts, 'form': form})
 
+def changepassword(request, username):
+	error = []
+	if request.method == 'POST':
+		form = ChangepwdForm(request.POST)
+		if form.is_valid()
+			data = form.cleaned_data
+			user = authenticate(username=username, password=data['old_pwd'])
+			if user is not None:
+				if data['new_pwd'] == data['new_pwd2']:
+					newuser = User.objects.get(username_exact = username)
 
 '''def bbs_list(request):
     params = request.POST if request.method == 'POST' else None
