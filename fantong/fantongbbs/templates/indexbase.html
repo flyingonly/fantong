@@ -1,10 +1,12 @@
-﻿<!DOCHTML>
+﻿{% load staticfiles %}
+<!DOCHTML>
 <html>
 
 <head>
 	<meta charset="utf-8"/>
 	<title>{% block title %}base{% endblock %}</title>
-	<link rel="stylesheet" type="text/css" href="indexbase.css"/>
+
+	<link rel="stylesheet" type="text/css" href = "{% static "fantongbbs/indexbase.css" %}"/>
 </head>
 
 <body>
@@ -70,7 +72,7 @@
 			<div class="roweight colfour">100-300</div>
 			<div class="roweight colfive">300以上</div>
 		</div>
-		{% end block %}
+		{% endblock %}
 	</div>
 	<div class="content">
 		{% block content %}{% endblock %}
