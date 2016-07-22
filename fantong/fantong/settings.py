@@ -122,4 +122,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+STATICFILES_DIRS = [
+    'static/',
+]
+
+MEDIA_ROOT = 'media/'
+MEDIA_URL = 'media/'
+
+ACCOUNT_ACTIVATION_DAYS = 7
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mails.tsinghua.edu.cn'
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'wang-wy14@mails.tsinghua.edu.cn'
+
+EMAIL_HOST_USER = 'wang-wy14@mails.tsinghua.edu.cn'
+EMAIL_HOST_PASSWORD = 'temp_password'
