@@ -15,95 +15,101 @@ div.topbar
 div.colone
 {
 	position:absolute;
-	left:5%;
+	left:2%;
 }
 
 div.coltwo
 {
 	position:absolute;
-	left:17.5%;
+	left:14.5%;
 }
 
 div.colthree
 {
 	position:absolute;
-	left:30%;
+	left:27%;
 }
 
 div.colfour
 {
 	position:absolute;
-	left:42.5%;
+	left:39.5%;
 }
 
 div.colfive
 {
 	position:absolute;
-	left:55%;
+	left:52%;
 }
 
 div.colsix
 {
 	position:absolute;
-	left:67.5%;
+	left:64.5%;
 }
 
 div.colseven
 {
 	position:absolute;
-	left:80%;
+	left:77%;
 }
 
 div.coleight
 {
 	position:absolute;
-	left:92.5%;
+	left:89.5%;
 }
 
 div.rowone
 {
 	position:absolute;
-	top:13%;
+	top:0%;
 }
 
 div.rowtwo
 {
 	position:absolute;
-	top:16%;
+	top:12.5%;
 }
 
 div.rowthree
 {
 	position:absolute;
-	top:19%;
+	top:25%;
 }
 
 div.rowfour
 {
 	position:absolute;
-	top:22%;
+	top:37.5%;
 }
 
 div.rowfive
 {
 	position:absolute;
-	top:25%;
+	top:50%;
 }
 
 div.rowsix
 {
 	position:absolute;
-	top:28%;
+	top:62.5%;
 }
 
 div.rowseven
 {
 	position:absolute;
-	top:31%;
+	top:75%;
 }
 
 div.roweight
 {
 	position:absolute;
-	top:34%;
+	top:87.5%;
+}
+
+div.content
+{
+	position:absolute;
+	top:45%;
 }
