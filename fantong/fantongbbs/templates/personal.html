@@ -1,54 +1,14 @@
-﻿{% load staticfiles %}
-<!DOCHTML>
-<html>
+﻿{% extends "personalbase.html" %}
 
-<head>
-	<meta charset="utf-8"/>
-	<title>{{user.UName}}的个人主页</title>
-	<link rel="stylesheet" type="text/css" href="{% static "fantongbbs/personal.css" %}"/>
-</head>
+{% block title %}{{user.UName}}的个人主页{% endblock %}
 
-<body>
-	<div class="head">
-	
+{% block content %}
+<div class="postinfo">
+{% for post in posts %}
+	<div class="post">
+		<div class="title">{{post.pTitle}}</div>
+		<div class="posttime">{{post.PTime}}</div>
 	</div>
-	<div id="topback">进入论坛</div>
-	<div id="toprelease">发帖</div>
-	<div class="personalinfo">
-		<img src="{{user.UImage}}" alt="Your img"/>
-		<div id="status">
-			{% if user.UForbidden%}
-				您的账号处于正常状态
-			{% else %}
-				您的帐号处于禁言状态‘
-			{% endif %}
-		<div>
-		<div id="follows">
-			<div id="userfollow">
-				<div id="userfollownum">{{ user.UFollowUserNum }}</div>
-				<div id="ufollow">关注</div>
-			</div>
-			<div id="postfollow">
-				<div id="postfollownum">{{ user.UFollowPostNum }}</div>
-				<div id="pfollow">点赞</div>
-			</div>
-			<div id="postrelease">
-				<div id="postreleasenum">{{ user.UPostNum }}</div>
-				<div id="prelease">发布</div>
-			</div>
-		</div>
-		<div id="revise">修改个人资料</div>
-	</div>
-	<div class="postinfo">
-	{% for post in posts %}
-		<div class="post">
-			<div class="title">{{post.pTitle}}</div>
-			<div class="posttime">{{post.PTime}}</div>
-		</div>
-	{% endfor %}
-	</div>
-	<div id="bottomback">进入论坛</div>
-	<div id="bottomrelease">发帖</div>
-</body>
-
-</html>
+{% endfor %}
+</div>
+{% endblock %}

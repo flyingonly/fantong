@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 
 class BBSUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    UImage = models.ImageField(null=True)
-    UAdmin = models.BooleanField(default=False)
-    UFollowUserNum = models.IntegerField(null=True)
-    UFollowPostNum = models.IntegerField(null=True)
-    UPostNum = models.IntegerField(null=True)
-    UForbidden = models.BooleanField(default=False)
+    UImage = models.ImageField()
+    UAdmin = models.BooleanField()
+    UFollowUserNum = models.IntegerField()
+    UFollowPostNum = models.IntegerField()
+    UPostNum = models.IntegerField()
+    UForbidden = models.BooleanField()
     UForbiddenToTime = models.DateTimeField(null=True, blank=True)
 
 
