@@ -5,19 +5,14 @@ from django.contrib.auth.models import User
 
 
 class BBSUser(models.Model):
-    UAccount = models.EmailField()
-    UName = models.CharField(max_length=50)
-    UPassword = models.CharField(max_length=50)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     UImage = models.ImageField()
     UAdmin = models.BooleanField()
     UFollowUserNum = models.IntegerField()
     UFollowPostNum = models.IntegerField()
     UPostNum = models.IntegerField()
     UForbidden = models.BooleanField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.UName
+    UForbiddenToTime = models.DateTimeField(null=True, blank=True)
 
 
 class BBSPost(models.Model):
