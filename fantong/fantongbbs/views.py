@@ -9,6 +9,10 @@ from .forms import ImageForm
 from .forms import ChangepwdForm
 
 
+def update_time(request):
+    return HttpResponseRedirect('/personal/' + request.user.username)
+
+
 def bbs_list(request):
     params = request.POST if request.method == 'POST' else None
     form = PostForm(params)
