@@ -1,18 +1,8 @@
 from django import forms
-from django.contrib.auth.models import User
-from registration.forms import RegistrationForm
+from .models import BBSPost
 
 
-class RegistrationForm(RegistrationForm):
-    UFollowUserNum = forms.IntegerField()
-
+class PostForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ("username", "email", "password1", "password2", "UFollowUserNum")
-
-    def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
-        user.BBSUser.UFollowUserNum = self.cleaned_data["UFollowUserNum"]
-        if commit:
-            user.save()
-        return user
+        model = BBSPost
+        fields = ('PTitle', 'PContent')

@@ -1,20 +1,32 @@
-﻿{% extends "indexbase.html" %}/span>
+﻿{% extends "indexbase.html" %}
 
-{% block title %}My amazing blog{% endblock %}
+{% block title %}帖子详情{% endblock %}
 
 {% block content %}
+<div id="topback">返回所选分区</div>
 {% for post in posts %}
+	<hr>
 	<div class="post">
-		<h2>{{post.pTitle}}</h2>
+		<h2>{{post.PTitle}}</h2>
 		<div class="user">
 			{{post.PUserID}}
 		</div>
 		<div class="posttime">
+			{% if post.PTime%}
 			{{post.PTime}}
+			{% endif %}
 		</div>
 		<div class="postcontent">
 			{{post.PContent}}
 		</div>
 	</div>
 {% endfor %}
+<div class="reply">
+	<hr>
+	<form method="POST" class="post-form">{% csrf_token %}
+		{{form.as_p}}
+		<button type="submit" class="save btn btn-default">回复</button>
+	</form>
+</div>
+<div id="bottomback">返回所选分区</div>
 {% endblock %}
