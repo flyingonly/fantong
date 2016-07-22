@@ -1,0 +1,53 @@
+{% for comPost in posts %}
+	{% if not forloop.first %}
+		{% for miniPost in comPost %}
+			{% if forloop.first %}
+				<hr>
+				<hr>
+				<div class="comPost">
+					<div class="user">
+						{{miniPost.PUserID}}
+					</div>
+					<div class="posttime">
+						{% if miniPost.PTime%}
+						{{miniPost.PTime}}
+						{% endif %}
+					</div>
+					<div class="postcontent">
+						{{miniPost.PContent}}
+					</div>
+				</div>
+			{% else %}
+				<hr>
+				<div class="comPost">
+					<div class="user">
+						{{miniPost.PUserID}}
+					</div>
+					<div class="posttime">
+						{% if miniPost.PTime%}
+						{{miniPost.PTime}}
+						{% endif %}
+					</div>
+					<div class="postcontent">
+						{{miniPost.PContent}}
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% else %}
+	<div class="threadPost">
+		<h2>{{comPost.PTitle}}</h2>
+		<div class="user">
+			{{comPost.PUserID}}
+		</div>
+		<div class="posttime">
+			{% if comPost.PTime%}
+			{{comPost.PTime}}
+			{% endif %}
+		</div>
+		<div class="postcontent">
+			{{comPost.PContent}}
+		</div>
+	</div>
+	{% endif %}
+{% endfor %}

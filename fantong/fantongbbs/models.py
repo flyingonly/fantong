@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -8,19 +9,19 @@ class BBSUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     UImage = models.ImageField(null=True)
     UAdmin = models.BooleanField(default=False)
-    UFollowUserNum = models.IntegerField(null=True)
-    UFollowPostNum = models.IntegerField(null=True)
-    UPostNum = models.IntegerField(null=True)
+    UFollowUserNum = models.IntegerField(default=0)
+    UFollowPostNum = models.IntegerField(default=0)
+    UPostNum = models.IntegerField(default=0)
     UForbidden = models.BooleanField(default=False)
     UForbiddenToTime = models.DateTimeField(null=True, blank=True)
 
 
 class BBSPost(models.Model):
     PUserID = models.ForeignKey(User)  # 帖子作者关系
-    PTitle = models.CharField(max_length=100)
+    PTitle = models.CharField(max_length=100, blank=True)
     PContent = models.TextField()
-    PTime = models.DateTimeField(null=True)
-    PLastComTime = models.DateTimeField(null=True)
+    PTime = models.DateTimeField(default=timezone.now)
+    PLastComTime = models.DateTimeField(default=timezone.now)
     LOCATION_CHOICE = (
         (u'海淀区', u'海淀区'),
         (u'朝阳区', u'朝阳区'),
@@ -75,17 +76,17 @@ class BBSPost(models.Model):
         (u'100-300', u'100-300'),
         (u'300以上', u'300以上'),
     )
-    PTagLocation = models.CharField(max_length=50, choices=LOCATION_CHOICE)
-    PTagClass = models.CharField(max_length=50, choices=CLASS_CHOICE)
-    PTagPrice = models.CharField(max_length=50, choices=PRICE_CHOICE)
-    PKeywords = models.CharField(max_length=100)
+    PTagLocation = models.CharField(max_length=50, choices=LOCATION_CHOICE, blank=True)
+    PTagClass = models.CharField(max_length=50, choices=CLASS_CHOICE, blank=True)
+    PTagPrice = models.CharField(max_length=50, choices=PRICE_CHOICE, blank=True)
+    PKeywords = models.CharField(max_length=100, blank=True)
     PDelete = models.BooleanField(default=False)
-    PLikeNum = models.IntegerField(null=True)
-    PSection = models.IntegerField(null=True)
+    PLikeNum = models.IntegerField(default=0)
+    PSection = models.IntegerField(default=1)
     PParentID = models.ForeignKey('self', blank=True, null=True)  # 帖子父节点关系
     PEssential = models.BooleanField(default=False)
-    PCheck = models.IntegerField(null=True)
-    PLimit = models.IntegerField(null=True)
+    PCheck = models.IntegerField(default=0)
+    PLimit = models.IntegerField(default=0)
 
     def __str__(self):
         return self.PTitle
