@@ -12,10 +12,10 @@
 	<div class="head">
 	
 	</div>
-	<a id="topback" href="/index">进入论坛</a>
-	<div id="toprelease">发帖</div>
+	<a id="topback" href="{% url 'index' %}">进入论坛</a>
 	<div class="personalinfo">
-		<img src="{{user.UImage}}" alt="Your img"/>
+		{% load staticfiles %}
+		<img src="{{user.UImage.url}}" alt="Your img"/>
 		<div id="status">
 			{% if user.UForbidden%}
 				您的账号处于正常状态
@@ -46,8 +46,7 @@
 	<div class="content">
 		{% block content %}{% endblock %}
 	</div>
-	<a id="bottomback" href="/index">进入论坛</a>
-	<div id="bottomrelease">发帖</div>
+	<a id="bottomback" href="{% url 'index' %}">进入论坛</a>
 </body>
 
 </html>

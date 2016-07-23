@@ -129,7 +129,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = 'media/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
