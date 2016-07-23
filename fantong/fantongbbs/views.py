@@ -30,16 +30,31 @@ def get_user(request):
     user = BBSUser.objects.get(user=request.user)
     return render(request, 'personal.html', {'posts': posts, 'user': user})
 
+
 def bbs_post_detail(request, param):
     threadID = int(param)
-    posts = list(BBSPost.objects.filter(id=threadID)) + list(BBSPost.objects.filter(PParentID=threadID))
+    PPost = BBSPost.objects.get(id=threadID)
+    params = request.POST if request.method == 'POST' else None
+    form = PostForm(params)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.PUserID = request.user
+        post.PParentID = PPost
+        post.save()
+        form = PostForm()
+
+    posts = list(BBSPost.objects.filter(id=threadID)) + \
+        list(BBSPost.objects.filter(PParentID=threadID))
     for i in range(1, len(posts)):
-        posts[i] = [posts[i]] + list(BBSPost.objects.filter(PParentID=posts[i].id))
+        posts[i] = [posts[i]] + \
+            list(BBSPost.objects.filter(PParentID=posts[i].id))
     print(posts)
-    return render(request, 'postDetail.html', {'posts': posts})
+    return render(request, 'postDetail.html', {'posts': posts, 'form': form})
+
 
 def change_password(request, username):
     error = []
+    user = BBSUser.objects.get(user=request.user)
     if request.method == 'POST':
         form = ChangepwdForm(request.POST)
         print('as')
@@ -60,30 +75,15 @@ def change_password(request, username):
             error.append('Please input the required domain')
     else:
         form = ChangepwdForm()
-    return render_to_response('changepassword.html', {'form': form, 'error': error}, context_instance = RequestContext(request))
+    return render_to_response('changepassword.html', {'form': form, 'error': error, 'user': user}, context_instance=RequestContext(request))
 
 
-'''
-def changepassword(request, username):
-    error = []
-    if request.method == 'POST':
-        form = ChangepwdForm(request.POST)
-        if form.is_valid()
-            data = form.cleaned_data
-            user = authenticate(username=username, password=data['old_pwd'])
-            if user is not None:
-                if data['new_pwd'] == data['new_pwd2']:
-                    newuser = User.objects.get(username_exact = username)
-
-def bbs_list(request):
-    params = request.POST if request.method == 'POST' else None
-    form = ImageForm(params)
-    if form.is_valid():
-        data = form.cleaned_data
+def change_image(request, username):
+    files = request.FILES if request.method == 'POST' else None
+    user = BBSUser.objects.get(user=request.user)
+    if files:
         user = BBSUser.objects.get(user=request.user)
-        print(user)
-        user.UFollowUserNum = data['UFollowUserNum']
+        user.UImage = files['UImage']
         user.save()
     posts = BBSUser.objects.all()
-    return render(request, 'index.html', {'posts': posts, 'form': form})
-'''
+    return render(request, 'revisehead.html', {'posts': posts, 'user': user})

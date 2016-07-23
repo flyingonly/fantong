@@ -3,5 +3,10 @@
 {% block title %}修改头像{% endblock %}
 
 {% block content %}
-
+<form action="." method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+{% load staticfiles %}
+    <p><label for="id_UImage">UImage:</label> <input id="id_UImage" name="UImage" type="file" /></p>
+    <input type="submit" value="Enter">
+</form>
 {% endblock %}

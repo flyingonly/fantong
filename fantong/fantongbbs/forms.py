@@ -1,6 +1,7 @@
 from django import forms
 from .models import BBSPost, BBSUser
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PostForm(forms.ModelForm):
@@ -12,8 +13,7 @@ class PostForm(forms.ModelForm):
 class ImageForm(forms.ModelForm):
     class Meta:
         model = BBSUser
-        fields = ('UFollowUserNum',)
-
+        fields = ('UImage',)
 
 class ChangepwdForm(forms.Form):
     old_pwd = forms.CharField(label='OLD PASSWORD', widget=forms.PasswordInput)

@@ -3,7 +3,9 @@
 {% block title %}帖子详情{% endblock %}
 
 {% block content %}
-<div id="topback">返回所选分区</div>
+<div id="topback">
+<a href="{% url 'index' %}">返回主页</a>
+</div>
 {% for comPost in posts %}
 	{% if not forloop.first %}
 		{% for miniPost in comPost %}
@@ -65,5 +67,8 @@
 		<button type="submit" class="save btn btn-default">回复</button>
 	</form>
 </div>
-<div id="bottomback">返回所选分区</div>
+<div id="bottomback">
+<a href="{% url 'index' %}">返回主页</a>
+
+</div>
 {% endblock %}
