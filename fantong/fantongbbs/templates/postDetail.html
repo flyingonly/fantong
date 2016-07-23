@@ -59,6 +59,7 @@
 	</div>
 	{% endif %}
 {% endfor %}
+{% if user.is_authenticated %}
 <div class="reply">
 	<hr>
 	<form method="POST" class="post-form">
@@ -67,8 +68,8 @@
 		<button type="submit" class="save btn btn-default">回复</button>
 	</form>
 </div>
+{% endif %}
 <div id="bottomback">
 <a href="{% url 'index' %}">返回主页</a>
-
 </div>
 {% endblock %}

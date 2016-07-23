@@ -14,6 +14,10 @@ def update_time(request):
 
 def bbs_list(request):
     params = request.POST if request.method == 'POST' else None
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = BBSUser.objects.get(user=request.user)
     form = IndexPostForm(params)
     if form.is_valid():
         post = form.save(commit=False)
@@ -21,7 +25,7 @@ def bbs_list(request):
         post.save()
         form = PostForm()
     posts = BBSPost.objects.filter(PParentID__isnull=True)
-    return render(request, 'index.html', {'posts': posts, 'form': form})
+    return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user})
 
 
 def get_user(request):
