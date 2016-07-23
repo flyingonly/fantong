@@ -33,13 +33,23 @@ def get_user(request):
 
 def bbs_post_detail(request, param):
     threadID = int(param)
+    PPost = BBSPost.objects.get(id=threadID)
+    params = request.POST if request.method == 'POST' else None
+    form = PostForm(params)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.PUserID = request.user
+        post.PParentID = PPost
+        post.save()
+        form = PostForm()
+
     posts = list(BBSPost.objects.filter(id=threadID)) + \
         list(BBSPost.objects.filter(PParentID=threadID))
     for i in range(1, len(posts)):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id))
     print(posts)
-    return render(request, 'postDetail.html', {'posts': posts})
+    return render(request, 'postDetail.html', {'posts': posts, 'form': form})
 
 
 def change_password(request, username):
