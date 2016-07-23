@@ -27,7 +27,8 @@ def bbs_list(request):
 
 def get_user(request):
     posts = BBSPost.objects.filter(PUserID=request.user)
-    return render(request, 'personal.html', {'posts': posts, 'user': request.user})
+    user = BBSUser.objects.get(user=request.user)
+    return render(request, 'personal.html', {'posts': posts, 'user': user})
 
 def bbs_post_detail(request, param):
     threadID = int(param)
