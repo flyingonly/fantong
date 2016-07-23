@@ -4,8 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .models import BBSPost, BBSUser
-from .forms import PostForm
-from .forms import ImageForm
+from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
 
 
@@ -15,7 +14,7 @@ def update_time(request):
 
 def bbs_list(request):
     params = request.POST if request.method == 'POST' else None
-    form = PostForm(params)
+    form = IndexPostForm(params)
     if form.is_valid():
         post = form.save(commit=False)
         post.PUserID = request.user

@@ -7,13 +7,14 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 class PostForm(forms.ModelForm):
     class Meta:
         model = BBSPost
-        fields = ('PTitle', 'PContent')
+        fields = ('PContent',)
 
-
-class ImageForm(forms.ModelForm):
+class IndexPostForm(forms.ModelForm):
     class Meta:
-        model = BBSUser
-        fields = ('UImage',)
+        model = BBSPost
+        fields = ('PTitle', 'PContent', 'PTagLocation', 'PTagClass', 'PTagPrice')
+
+
 
 class ChangepwdForm(forms.Form):
     old_pwd = forms.CharField(label='OLD PASSWORD', widget=forms.PasswordInput)
