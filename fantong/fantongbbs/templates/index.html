@@ -1,13 +1,14 @@
 ﻿{% extends "indexbase.html" %}
 
-{% block title %}帖子详情{% endblock %}
+{% block title %}论坛主页{% endblock %}
 
 {% block content %}
-<div id="topback">返回所选分区</div>
 {% for post in posts %}
 	<hr>
 	<div class="post">
-		<h2>{{post.PTitle}}</h2>
+		<div class="title">
+			<a class="posttitle" href="{% url 'postDetail' %}">{{post.PTitle}}</a>
+		</div>
 		<div class="user">
 			{{post.PUserID}}
 		</div>
@@ -25,8 +26,7 @@
 	<hr>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{form.as_p}}
-		<button type="submit" class="save btn btn-default">回复</button>
+		<button type="submit" class="save btn btn-default">发帖</button>
 	</form>
 </div>
-<div id="bottomback">返回所选分区</div>
 {% endblock %}

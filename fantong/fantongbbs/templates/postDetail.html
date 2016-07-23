@@ -1,3 +1,9 @@
+{% extends "indexbase.html" %}
+
+{% block title %}帖子详情{% endblock %}
+
+{% block content %}
+<div id="topback">返回所选分区</div>
 {% for comPost in posts %}
 	{% if not forloop.first %}
 		{% for miniPost in comPost %}
@@ -51,3 +57,13 @@
 	</div>
 	{% endif %}
 {% endfor %}
+<div class="reply">
+	<hr>
+	<form method="POST" class="post-form">
+		{% csrf_token %}
+		{{form.as_p}}
+		<button type="submit" class="save btn btn-default">回复</button>
+	</form>
+</div>
+<div id="bottomback">返回所选分区</div>
+{% endblock %}
