@@ -30,7 +30,13 @@ def bbs_list(request):
 
 def get_user(request):
     posts = BBSPost.objects.filter(PUserID=request.user)
-    user = BBSUser.objects.get(user=request.user)
+    if BBSUser.objects.filter(user=request.user).exists():
+        user = BBSUser.objects.get(user=request.user)
+    else:
+        newuser = BBSUser()
+        newuser.user = request.user
+        user = newuser
+        newuser.save()
     return render(request, 'personal.html', {'posts': posts, 'user': user})
 
 

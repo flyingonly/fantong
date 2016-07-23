@@ -14,8 +14,10 @@
 	</div>
 	<a id="topback" href="{% url 'index' %}">进入论坛</a>
 	<div class="personalinfo">
+		{%if user.UImage%}
 		{% load staticfiles %}
 		<img src="{{user.UImage.url}}" alt="Your img"/>
+		{%endif%}
 		<div id="status">
 			{% if user.UForbidden%}
 				您的账号处于正常状态

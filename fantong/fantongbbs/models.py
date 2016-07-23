@@ -7,13 +7,14 @@ from django.utils import timezone
 
 class BBSUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    UImage = models.ImageField(null=True)
+    UImage = models.ImageField(null=True, blank=True)
     UAdmin = models.BooleanField(default=False)
     UFollowUserNum = models.IntegerField(default=0)
     UFollowPostNum = models.IntegerField(default=0)
     UPostNum = models.IntegerField(default=0)
     UForbidden = models.BooleanField(default=False)
     UForbiddenToTime = models.DateTimeField(null=True, blank=True)
+
 
 
 class BBSPost(models.Model):
