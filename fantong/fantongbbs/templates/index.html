@@ -22,7 +22,7 @@
 		</div>
 	</div>
 {% endfor %}
-{% if user.is_authenticated %}
+{% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
 	<form method="POST" class="post-form">{% csrf_token %}
