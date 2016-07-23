@@ -5,4 +5,5 @@ urlpatterns = [
     url(r'^personal/', views.get_user),
     url(r'^accounts/profile/$', views.update_time),
     url(r'changepassword/(.+)/$', views.change_password),
+    url(r'^bbs_post_detail/(\d+)/$', views.bbs_post_detail, name='bbs_post_detail')
 ]

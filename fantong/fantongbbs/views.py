@@ -21,7 +21,7 @@ def bbs_list(request):
         post.PUserID = request.user
         post.save()
         form = PostForm()
-    posts = BBSPost.objects.all()
+    posts = BBSPost.objects.filter(PParentID__isnull=True)
     return render(request, 'index.html', {'posts': posts, 'form': form})
 
 
@@ -29,6 +29,13 @@ def get_user(request):
     posts = BBSPost.objects.filter(PUserID=request.user)
     return render(request, 'personal.html', {'posts': posts, 'user': request.user})
 
+def bbs_post_detail(request, param):
+    threadID = int(param)
+    posts = list(BBSPost.objects.filter(id=threadID)) + list(BBSPost.objects.filter(PParentID=threadID))
+    for i in range(1, len(posts)):
+        posts[i] = [posts[i]] + list(BBSPost.objects.filter(PParentID=posts[i].id))
+    print(posts)
+    return render(request, 'postDetail.html', {'posts': posts})
 
 def change_password(request, username):
     error = []
