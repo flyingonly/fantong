@@ -42,6 +42,10 @@ def get_user(request):
 
 def bbs_post_detail(request, param):
     threadID = int(param)
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = BBSUser.objects.get(user=request.user)
     PPost = BBSPost.objects.get(id=threadID)
     params = request.POST if request.method == 'POST' else None
     form = PostForm(params)
@@ -58,7 +62,7 @@ def bbs_post_detail(request, param):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id))
     print(posts)
-    return render(request, 'postDetail.html', {'posts': posts, 'form': form})
+    return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
 
 
 def change_password(request, username):
