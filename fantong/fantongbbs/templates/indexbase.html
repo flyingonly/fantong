@@ -11,7 +11,18 @@
 
 <body>
 	<div class="head">
-	
+		{% if user.user.is_authenticated %}
+		<div id="personal">
+			<a href="/personal/{{user}}">个人主页</a>
+		</div>
+		<div id="logout">
+			<a href="/accounts/logout">登出</a>
+		</div>
+		{% else %}
+		<div id="login">
+			<a href="/accounts/login">登录</a>
+		</div>
+		{% endif %}
 	</div>
 	<div class="topbar">
 		<div id="district">

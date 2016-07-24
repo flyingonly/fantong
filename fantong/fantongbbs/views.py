@@ -4,8 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .models import BBSPost, BBSUser
-from .forms import PostForm
-from .forms import ImageForm
+from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
 
 
@@ -15,24 +14,38 @@ def update_time(request):
 
 def bbs_list(request):
     params = request.POST if request.method == 'POST' else None
-    form = PostForm(params)
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = BBSUser.objects.get(user=request.user)
+    form = IndexPostForm(params)
     if form.is_valid():
         post = form.save(commit=False)
         post.PUserID = request.user
         post.save()
         form = PostForm()
     posts = BBSPost.objects.filter(PParentID__isnull=True)
-    return render(request, 'index.html', {'posts': posts, 'form': form})
+    return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user})
 
 
 def get_user(request):
     posts = BBSPost.objects.filter(PUserID=request.user)
-    user = BBSUser.objects.get(user=request.user)
+    if BBSUser.objects.filter(user=request.user).exists():
+        user = BBSUser.objects.get(user=request.user)
+    else:
+        newuser = BBSUser()
+        newuser.user = request.user
+        user = newuser
+        newuser.save()
     return render(request, 'personal.html', {'posts': posts, 'user': user})
 
 
 def bbs_post_detail(request, param):
     threadID = int(param)
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = BBSUser.objects.get(user=request.user)
     PPost = BBSPost.objects.get(id=threadID)
     params = request.POST if request.method == 'POST' else None
     form = PostForm(params)
@@ -49,7 +62,7 @@ def bbs_post_detail(request, param):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id))
     print(posts)
-    return render(request, 'postDetail.html', {'posts': posts, 'form': form})
+    return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
 
 
 def change_password(request, username):
