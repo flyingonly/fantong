@@ -42,6 +42,15 @@
 				</div>
 			{% endif %}
 		{% endfor %}
+		{% for miniPost in comPost %}
+			{% if forloop.first %}
+			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
+			{% csrf_token %}
+			{{form.as_p}}
+			<input type="button" class="save btn btn-default" postid = "{{miniPost.id}}" value="回复">
+		</form>
+		{% endif %}	
+		{% endfor %}
 	{% else %}
 	<div class="threadPost">
 		<h2>{{comPost.PTitle}}</h2>
