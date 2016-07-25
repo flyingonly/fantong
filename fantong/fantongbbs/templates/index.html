@@ -55,6 +55,7 @@
 <div class="reply">
 	<hr>
 	<input id="fileImage" type="file" size="30"/>
+    <input id="file" type="file" size="30" multiple/>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{form.as_p}}
 		<button type="submit" class="save btn btn-default">发帖</button>
