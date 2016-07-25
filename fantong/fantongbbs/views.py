@@ -7,6 +7,10 @@ from .models import BBSPost, BBSUser
 from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
 
+def ajax_append_image(request):
+    print(request)
+    return HttpResponse('hello')
+
 def ajax_deal(request):
     print(request)
     post = BBSPost()

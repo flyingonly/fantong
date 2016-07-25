@@ -9,4 +9,6 @@ urlpatterns = [
     url(r'^bbs_post_detail/(\d+)/$', views.bbs_post_detail, name='postDetail'),
     url(r'changeimage/(.+)/$', views.change_image),
     url(r'^ajax_deal/$', views.ajax_deal),
+    url(r'^ajax_append_image/$', views.ajax_append_image),
 ]
+
