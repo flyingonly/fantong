@@ -6,7 +6,15 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>{% block title %}base{% endblock %}</title>
-
+	<script type="text/javascript" src="{% static "fantongbbs/jquery.min.js" %}"></script>
+	<script type="text/javascript">
+		$.ajaxSetup({
+    	data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+		});
+	</script>
+	{% block js %}
+	<script type="text/javascript" src="{% static "fantongbbs/myjs.js" %}"></script>
+	{% endblock %}
 	<link rel="stylesheet" type="text/css" href = "{% static "fantongbbs/indexbase.css" %}"/>
 </head>
 

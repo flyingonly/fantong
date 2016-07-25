@@ -2,10 +2,20 @@ from django.shortcuts import render, render_to_response
 from django.contrib.auth import authenticate
 from django.template import RequestContext
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import BBSPost, BBSUser
 from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
+
+def ajax_deal(request):
+    print(request)
+    post = BBSPost()
+    Parent = BBSPost.objects.get(id=int(request.POST['PParentID']))
+    post.PUserID = request.user
+    post.PParentID = Parent
+    post.PContent = request.POST['PContent']
+    post.save()
+    return HttpResponse('hello')
 
 
 def update_time(request):
