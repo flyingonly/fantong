@@ -3,7 +3,6 @@
 {% block title %}论坛主页{% endblock %}
 
 {% block content %}
-{% autopaginate posts 10 %}
 {% for post in posts %}
 	<hr>
 	<div class="post">
@@ -23,11 +22,12 @@
 		</div>
 	</div>
 {% endfor %}
-{% paginate %}
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
+	<input id="fileImage" type="file" size="30"/>
 	<form method="POST" class="post-form">{% csrf_token %}
+		{% load staticfiles %}
 		{{form.as_p}}
 		<button type="submit" class="save btn btn-default">发帖</button>
 	</form>
