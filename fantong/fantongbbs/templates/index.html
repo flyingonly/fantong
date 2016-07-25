@@ -3,6 +3,7 @@
 {% block title %}论坛主页{% endblock %}
 
 {% block content %}
+{% autopaginate posts 10 %}
 {% for post in posts %}
 	<hr>
 	<div class="post">
@@ -22,6 +23,7 @@
 		</div>
 	</div>
 {% endfor %}
+{% paginate %}
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
