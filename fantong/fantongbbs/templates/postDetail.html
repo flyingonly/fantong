@@ -45,9 +45,9 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<p class="userimg">
-								{% if user.UImage %}
+								{% if miniPost.PUserID.bbsuser.UImage %}
 								{% load staticfiles %}
-								<img src="{{user.UImage.url}}" alt="Your img"/>
+								<img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/>
 								{% endif %}
 							</p>
 							<p class="user">
@@ -100,20 +100,20 @@
 			<div class="row">
 				<div class="col-lg-3">
 					<p class="userimg">
-						{% if user.UImage %}
+						{% if comPost.PUserID.bbsuser.UImage %}
 						{% load staticfiles %}
-						<img src="{{user.UImage.url}}" alt="Your img"/>
+						<img src="{{comPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/>
 						{% endif %}
 					</p>
 					<p class="user">
-						{{miniPost.PUserID}}
+						{{comPost.PUserID}}
 					</p>
 					<p class="posttime">
-						{{miniPost.PTime}}
+						{{comPost.PTime}}
 					</p>
 				</div>
 				<div class="postcontent col-lg-9" id = "post_{{comPost.id}}">
-					{{miniPost.PContent}}
+					{{comPost.PContent}}
 				</div>
 			</div>
 		</div>
