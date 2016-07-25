@@ -30,6 +30,10 @@ def ajax_append_files(request):
         path = default_storage.save(data.name, ContentFile(data.read()))
     return HttpResponse(json.dumps(key_list), content_type="application/json")
 
+@csrf_exempt
+def ajax_search(request):
+    data = BBSPost.objects.filter(PContent__contains=request.POST['pat'])
+    print(data)
 
 def ajax_deal(request):
     print(request)

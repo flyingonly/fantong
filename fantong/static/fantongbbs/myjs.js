@@ -56,4 +56,15 @@ $(function() {
         });
         alert("{%static asd %}")
     })
+    $('.navbar-form.navbar-right .btn.btn-default').bind("click",function () {
+        var s = $('.navbar-form.navbar-right .form-control').val()
+        $.ajax({
+            url: "/ajax_search/",
+            type: "post",
+            data: {'pat': s, },
+            success: function(data, textStatus) {
+                alert()
+            }
+        });
+    })
 });
