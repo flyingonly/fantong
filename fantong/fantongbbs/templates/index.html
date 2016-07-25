@@ -3,25 +3,30 @@
 {% block title %}论坛主页{% endblock %}
 
 {% block content %}
-{% for post in posts %}
-	<hr>
-	<div class="post">
-		<div class="title">
-			<a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
-		</div>
-		<div class="user">
-			{{post.PUserID}}
-		</div>
-		<div class="posttime">
-			{% if post.PTime%}
-			{{post.PTime}}
-			{% endif %}
-		</div>
-		<div class="postcontent">
-			{{post.id}}
-		</div>
+<div class="container">
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="col-lg-8">帖子标题</th>
+					<th class="col-lg-2">发帖人</th>
+					<th class="col-lg-2">发帖时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for post in posts %}
+				<tr>
+					<th class="col-lg-8">
+						<a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+					</th>
+					<th class="col-lg-2">{{post.PUserID}}</th>
+					<th class="col-lg-2">{{post.PTime}}</th>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
-{% endfor %}
+</div>
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>

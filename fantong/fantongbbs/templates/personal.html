@@ -4,11 +4,20 @@
 
 {% block content %}
 <div class="postinfo">
-{% for post in posts %}
-	<div class="post">
-		<div class="title">{{post.PTitle}}</div>
-		<div class="posttime">{{post.PTime}}</div>
-	</div>
-{% endfor %}
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for post in posts %}
+			<tr>
+				<td>{{post.PTitle}}</td>
+				<td>{{post.PTime}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
 </div>
 {% endblock %}

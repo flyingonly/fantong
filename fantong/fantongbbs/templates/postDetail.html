@@ -4,7 +4,9 @@
 
 {% block content %}
 <div id="topback">
-<a href="{% url 'index' %}">返回主页</a>
+<button type="button" class="btn btn-default">
+	<a href="/changeimage/{{user}}">返回主页</a>
+</button>
 </div>
 {% for comPost in posts %}
 	{% if not forloop.first %}
@@ -12,32 +14,45 @@
 			{% if forloop.first %}
 				<hr>
 				<hr>
-				<div class="comPost">
-					<div class="user">
-						{{miniPost.PUserID}}
-					</div>
-					<div class="posttime">
-						{% if miniPost.PTime%}
-						{{miniPost.PTime}}
-						{% endif %}
-					</div>
-					<div class="postcontent">
-						{{miniPost.PContent}}
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3">
+							<p class="userimg">
+								{% if user.UImage %}
+								{% load staticfiles %}
+								<img src="{{user.UImage.url}}" alt="Your img"/>
+								{% endif %}
+							</p>
+							<p class="user">
+								{{miniPost.PUserID}}
+							</p>
+							<p class="posttime">
+								{{miniPost.PTime}}
+							</p>
+						</div>
+						<div class="postcontent col-lg-9">
+							{{miniPost.PContent}}
+						</div>
 					</div>
 				</div>
 			{% else %}
-				<hr>
-				<div class="comPost">
-					<div class="user">
-						{{miniPost.PUserID}}
-					</div>
-					<div class="posttime">
-						{% if miniPost.PTime%}
-						{{miniPost.PTime}}
-						{% endif %}
-					</div>
-					<div class="postcontent">
-						{{miniPost.PContent}}
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3"></div>
+						<div class="col-lg-9">
+							<hr>
+							<div class="user">
+								{{miniPost.PUserID}}
+							</div>
+							<div class="posttime">
+								{% if miniPost.PTime%}
+								{{miniPost.PTime}}
+								{% endif %}
+							</div>
+							<div class="postcontent col-lg-6">
+								{{miniPost.PContent}}
+							</div>
+						</div>
 					</div>
 				</div>
 			{% endif %}
@@ -48,22 +63,32 @@
 			{% csrf_token %}
 			{{form.as_p}}
 			<input type="button" class="save btn btn-default" postid = "{{miniPost.id}}" value="回复">
-		</form>
-		{% endif %}	
+			</form>
+			{% endif %}	
 		{% endfor %}
 	{% else %}
 	<div class="threadPost">
 		<h2>{{comPost.PTitle}}</h2>
-		<div class="user">
-			{{comPost.PUserID}}
-		</div>
-		<div class="posttime">
-			{% if comPost.PTime%}
-			{{comPost.PTime}}
-			{% endif %}
-		</div>
-		<div class="postcontent">
-			{{comPost.PContent}}
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3">
+					<p class="userimg">
+						{% if user.UImage %}
+						{% load staticfiles %}
+						<img src="{{user.UImage.url}}" alt="Your img"/>
+						{% endif %}
+					</p>
+					<p class="user">
+						{{miniPost.PUserID}}
+					</p>
+					<p class="posttime">
+						{{miniPost.PTime}}
+					</p>
+				</div>
+				<div class="postcontent col-lg-9">
+					{{miniPost.PContent}}
+				</div>
+			</div>
 		</div>
 	</div>
 	{% endif %}
@@ -78,7 +103,7 @@
 	</form>
 </div>
 {% endif %}
-<div id="bottomback">
-<a href="{% url 'index' %}">返回主页</a>
-</div>
+<button type="button" class="btn btn-default">
+	<a href="/changeimage/{{user}}">返回主页</a>
+</button>
 {% endblock %}
