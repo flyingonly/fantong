@@ -48,7 +48,7 @@ def bbs_list(request):
         post = form.save(commit=False)
         post.PUserID = request.user
         post.save()
-        form = PostForm()
+        form = IndexPostForm()
     posts = BBSPost.objects.filter(PParentID__isnull=True)
     return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user})
 
