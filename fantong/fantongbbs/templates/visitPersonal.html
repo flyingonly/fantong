@@ -1,0 +1,77 @@
+{% load staticfiles %}
+<!DOCHTML>
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>{% block title %}base{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static "personalbase.css" %}"/>
+</head>
+
+<body>
+	<div class="head">
+	
+	</div>
+	<a id="topback" href="{% url 'index' %}">进入论坛</a>
+	<div class="personalinfo">
+		<div id="username">{{visitedUser.user.username}}<div>
+		{%if visitedUser.UImage%}
+		{% load staticfiles %}
+		<img src="{{visitedUser.UImage.url}}" alt="Your img"/>
+		{%endif%}
+		{% if haveFollowed %}
+			<input type="button" class="followBtn" value="已关注">
+		{% else %}
+			<input type="button" class="followBtn" value="关注">
+		{% endif %}
+		<div id="follows">
+			<div id="userfollow">
+				<div id="userfollownum">{{ visitedUser.UFollowUserNum }}</div>
+				<div id="ufollow">关注</div>
+			</div>
+			<div id="postfollow">
+				<div id="postfollownum">{{ visitedUser.UFollowPostNum }}</div>
+				<div id="pfollow">点赞</div>
+			</div>
+			<div id="postrelease">
+				<div id="postreleasenum">{{ visitedUser.UPostNum }}</div>
+				<div id="prelease">发布</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="content">
+		{% block content %}{% endblock %}
+	</div>
+	<a id="bottomback" href="{% url 'index' %}">进入论坛</a>
+</body>
+	<script type="text/javascript" src="{% static "fantongbbs/jquery.min.js" %}"></script>
+	<script type="text/javascript">
+		$.ajaxSetup({
+    	data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+		});
+	</script>
+	<script type="text/javascript">
+		$(function() {
+    $('input.followBtn').bind("click", function() {
+        if (this.value == '已关注') 
+        {
+            this.value = '关注';
+        }
+        else
+        {
+            this.value = '已关注';
+        }
+        var user1ID = {{request.user.id}};
+        var user2ID = {{visitedUser.user.id}};
+        $.ajax({ url: '/follow_deal/',
+            type: 'POST',
+            data: { 'user1ID': user1ID, 'user2ID': user2ID,},
+            success: function(data, textStatus){
+            }
+        })
+    })
+    return true;
+});
+	</script>
+</html>

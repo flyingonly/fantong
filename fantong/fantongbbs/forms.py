@@ -1,7 +1,6 @@
 from django import forms
 from .models import BBSPost, BBSUser
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PostForm(forms.ModelForm):
