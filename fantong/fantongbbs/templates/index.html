@@ -1,4 +1,21 @@
-﻿{% extends "indexbase.html" %}
+﻿
+{% extends "indexbase.html" %}
+{% load staticfiles %}
+	{% block js %}
+    <script type="text/javascript">
+    	$(function() {
+    	{% for post in posts %}
+    	var s = '{{post.PContent}}'
+    	p = s.match(/__url_start__(\S*?)__url_end__/)
+    	while (!(p === null)) {
+    		s = s.replace(p[0], "<img src='media/" + p[1] + "' />")
+    		p = s.match(/__url_start__(\S*?)__url_end__/)
+    	}
+    	$('#post_{{post.id}}').html(s)
+    	{% endfor %}
+    });
+    </script>
+{% endblock %}
 
 {% block title %}论坛主页{% endblock %}
 
@@ -26,13 +43,13 @@
 			</tbody>
 		</table>
 	</div>
-</div>
+	</div>
+
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
 	<input id="fileImage" type="file" size="30"/>
 	<form method="POST" class="post-form">{% csrf_token %}
-		{% load staticfiles %}
 		{{form.as_p}}
 		<button type="submit" class="save btn btn-default">发帖</button>
 	</form>

@@ -1,3 +1,4 @@
+
 $(function() {
     $('input.save.btn.btn-default[postid]').bind("click", function() {
         var pid = $(this).attr("postid");
@@ -8,7 +9,9 @@ $(function() {
                 type: 'post',
                 data: { 'PParentID': pid, 'PContent': content },
                 success: function(data, textStatus) {
+                    if (data == "hello") {
                     window.location.reload()
+                }
                 }
             })
         }
@@ -20,15 +23,17 @@ $(function() {
         }
         var formdata = new FormData()
         formdata.append("file",$(this).prop('files')[0])
+        console.log($(this).prop('files')[0]);
         $.ajax({
             url: "/ajax_append_image/",
             type: "POST",
             data: formdata,
             processData: false,
-            contentType: false
+            contentType: false,
+            success: function(data, textStatus) {
+                $("form textarea").val($("form textarea").val() + "__url_start__" + data + "__url_end__")
+            }
         });
-        console.log($(this).prop('files')[0].name);
-        $("form textarea").append("<img src='" + $(this).val() + "'>")
         alert("{%static asd %}")
     })
 });
