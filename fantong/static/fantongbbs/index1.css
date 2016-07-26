@@ -52,3 +52,13 @@ label
 	color: #80bed6;
 	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
 }
+
+.no-up-border
+{
+	border-top: 1px solid transparent !important;
+}
+
+.myright
+{
+	margin-right:0px;
+}

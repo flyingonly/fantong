@@ -41,7 +41,7 @@
 					<th class="col-lg-3">{{post.PUserID.bbsuser.UNickname}}</th>
 					<th class="col-lg-3">{{post.PTime}}</th>
 				</tr>
-                <tr class="keywords" id="keyword_{{post.id}}">
+                <tr class="keywords no-up-border" id="keyword_{{post.id}}">
                     <th colspan=3>关键词:</th>
                 </tr>
 				{% endfor %}
@@ -56,8 +56,45 @@
 	<input id="fileImage" type="file" size="30"/>
     <input id="file" type="file" size="30" multiple/>
 	<form method="POST" class="post-form">{% csrf_token %}
-		{{form.as_p}}
-		<button type="submit" class="save btn btn-default mybutton blue">发帖</button>
+		<p>
+            <label for="id_PTitle">标题：</label>
+            <input id="id_PTitle" maxlength="90%" name="PTitle" type="text">
+        </p>
+        <p>
+            <label for="id_PContent">内容：</label>
+        </p>
+        <p>
+            <textarea cols="90%" id="id_PContent" name="PContent" rows="10"></textarea>
+        </p>
+        <p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="id_PTagLocation">地区：</label>
+                        <select id="id_PTagLocation" name="PTagLocation">
+
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="id_PTagClass">菜系：</label>
+                        <select id="id_PTagClass" name="PTagClass">
+
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="id_PTagPrice">价位：</label>
+                        <select id="id_PTagPrice" name="PTagPrice">
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </p>
+        <p>
+            <label for="id_PKeywords">关键词：</label>
+            <input id="id_PKeywords" maxlength="90%" name="PKeywords" type="text">
+        </p>
+        <button type="submit" class="save btn btn-default mybutton blue">发帖</button>
 	</form>
 </div>
 {% endif %}

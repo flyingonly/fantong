@@ -16,6 +16,14 @@ import json
 
 
 @csrf_exempt
+def ajax_change_nickname(request,userid):
+    user = BBSUser.objects.get(user=userid)
+    user.UNickname = request.POST['content']
+    user.save()
+    return HttpResponse("修改成功")
+
+
+@csrf_exempt
 def ajax_append_image(request):
     data = request.FILES['file']
     path = default_storage.save(data.name, ContentFile(data.read()))
@@ -80,6 +88,7 @@ def bbs_list(request):
         user = BBSUser.objects.get(user=request.user)
     form = IndexPostForm(params)
     if form.is_valid():
+        print(request.POST)
         post = form.save(commit=False)
         post.PUserID = request.user
         post.save()
@@ -99,7 +108,7 @@ def get_user(request, param):
             else:
                 newuser = BBSUser()
                 newuser.user = request.user
-                newuser.UNickname = user.username
+                newuser.UNickname = request.user.username
                 user = newuser
                 newuser.save()
             return render(request, 'personal.html', {'posts': posts, 'user': user})
@@ -240,9 +249,9 @@ def change_password(request, username):
 
 def change_image(request, username):
     files = request.FILES if request.method == 'POST' else None
-    user = BBSUser.objects.get(user=request.user)
+    user = BBSUser.objects.get(user__username=username)
     if files:
-        user = BBSUser.objects.get(user=request.user)
+        user = BBSUser.objects.get(user__username=username)
         user.UImage = files['UImage']
         user.save()
     posts = BBSUser.objects.all()

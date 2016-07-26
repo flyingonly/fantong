@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'changeimage/(.+)/$', views.change_image),
     url(r'^follow_user_deal/$', views.follow_user_deal),
     url(r'^ajax_deal/$', views.ajax_deal),
+    url(r'^ajax_change_nickname/(\w+)/$', views.ajax_change_nickname),
     url(r'^ajax_append_image/$', views.ajax_append_image),
     url(r'^ajax_append_files/$', views.ajax_append_files),
     url(r'^search/post/(\w+)/$', views.search_postbycontent),
