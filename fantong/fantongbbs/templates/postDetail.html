@@ -22,57 +22,19 @@
     		s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
     		p = s.match(/__url_start__(\S*?)__url_end__/)
     	}
+    	p = s.match(/__data_start__(\S*?)__data_end__/)
+    	pli = new Array()
+    	while (!(p === null)) {
+    		pli[pli.length] = p[1]
+    		s = s.replace(p[0], "")
+    		p = s.match(/__data_start__(\S*?)__data_end__/)
+    	}
+    	for (var i = pli.length - 1; i >= 0; i--) {
+    		$('div.threadPost .row').append($("<div><a href='{{BASE_DIR}}/media/" + pli[i] +  "' >" + pli[i] + "</a></div>"))
+    	}
     	$('#post_{{comPost.id}}').html(s)
 		{% endif %}
 		{% endfor %}
-    });
-    </script>
-
-    <script type="text/javascript">
-    $(function() {
-    	$('input.followBtn').bind("click", function(){
-    		if(this.value == '已收藏'){
-    			this.value = '收藏';
-    		}
-    		else{
-    			this.value = '已收藏';
-    		}
-    		var userID = {{request.user.id}};
-    		var postID;
-    		{% for comPost in posts %}
-    			{% if forloop.first %}
-    				postID = {{comPost.id}};
-    			{% endif %}
-    		{% endfor %}
-    		$.ajax({
-    			url: '/follow_post_deal/',
-    			type: 'POST',
-    			data: {'userID': userID, 'postID': postID}
-    		})
-    	})
-    });
-
-    $(function() {
-    	$('input.likeBtn').bind("click", function(){
-    		if(this.value == '已赞'){
-    			this.value = '点赞';
-    		}
-    		else{
-    			this.value = '已赞';
-    		}
-    		var userID = {{request.user.id}};
-    		var postID;
-    		{% for comPost in posts %}
-    			{% if forloop.first %}
-    				postID = {{comPost.id}};
-    			{% endif %}
-    		{% endfor %}
-    		$.ajax({
-    			url: '/like_post_deal/',
-    			type: 'POST',
-    			data: {'userID': userID, 'postID': postID}
-    		})
-    	})
     });
     </script>
 {% endblock %}
@@ -95,22 +57,23 @@
 							<p class="userimg">
 								{% if miniPost.PUserID.bbsuser.UImage %}
 								{% load staticfiles %}
-								<a  href="/personal/{{miniPost.PUserID}}"><img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
+								<img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/>
 								{% endif %}
 							</p>
 							<p class="user">
-								<a href="/personal/{{miniPost.PUserID}}">
-									{{miniPost.PUserID}}
-								</a>
+								{{miniPost.PUserID}}
 							</p>
 							<p class="posttime">
 								{{miniPost.PTime}}
 							</p>
-							{% if user.user.is_authenticated %}
-								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn" value="删除">
-								{% endif %}
-							{% endif %}
+							<div class="btn-group">
+								<button type="button" class="btn btn-default">
+									<a href="#">点赞</a>
+								</button>
+								<button type="button" class="btn btn-default">
+									<a href="#">收藏</a>
+								</button>
+							</div>
 						</div>
 						<div class="postcontent col-lg-9" id = "post_{{miniPost.id}}">
 							{{miniPost.PContent}}
@@ -124,20 +87,13 @@
 						<div class="col-lg-9">
 							<hr>
 							<div class="user">
-								<a href="/personal/{{miniPost.PUserID}}">
-									{{miniPost.PUserID}}
-								</a>
+								{{miniPost.PUserID}}
 							</div>
 							<div class="posttime">
 								{% if miniPost.PTime%}
 								{{miniPost.PTime}}
 								{% endif %}
 							</div>
-							{% if user.user.is_authenticated %}
-								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn" value="删除">
-								{% endif %}
-							{% endif %}
 							<div class="postcontent col-lg-6" id = "post_{{miniPost.id}}">
 								{{miniPost.PContent}}
 							</div>
@@ -146,6 +102,7 @@
 				</div>
 			{% endif %}
 		{% endfor %}
+		{% if user.user.is_authenticated %}
 		{% for miniPost in comPost %}
 			{% if forloop.first %}
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
@@ -153,8 +110,9 @@
 			{{form.as_p}}
 			<input type="button" class="save btn btn-default" postid = "{{miniPost.id}}" value="回复">
 			</form>
-			{% endif %}	
+			{% endif %}
 		{% endfor %}
+		{% endif %}
 	{% else %}
 	<div class="threadPost">
 		<h2>{{comPost.PTitle}}</h2>
@@ -164,36 +122,15 @@
 					<p class="userimg">
 						{% if comPost.PUserID.bbsuser.UImage %}
 						{% load staticfiles %}
-						<a href="/personal/{{comPost.PUserID}}"><img src="{{comPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
+						<img src="{{comPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/>
 						{% endif %}
 					</p>
 					<p class="user">
-						<a href="/personal/{{comPost.PUserID}}">
-							{{comPost.PUserID}}
-						</a>
+						{{comPost.PUserID}}
 					</p>
 					<p class="posttime">
 						{{comPost.PTime}}
 					</p>
-					<p class="LikeNum">
-						{{comPost.PLikeNum}} 个人觉得很赞
-					</p>
-					{% if user.user.is_authenticated %}
-						{% if user.user == comPost.PUserID %}
-							<input type="button" class="deleteBtn" value="删除">
-						{% else %}
-							{% if haveFollowed %}
-								<input type="button" class="followBtn" value="已收藏">
-							{% else %}
-								<input type="button" class="followBtn" value="收藏">
-							{% endif %}
-							{% if haveLiked %}
-								<input type="button" class="likeBtn" value="已赞">
-							{% else %}
-								<input type="button" class="likeBtn" value="点赞">
-							{% endif %}
-						{% endif %}
-					{% endif %}
 				</div>
 				<div class="postcontent col-lg-9" id = "post_{{comPost.id}}">
 					{{comPost.PContent}}
@@ -215,6 +152,6 @@
 </div>
 {% endif %}
 <button type="button" class="btn btn-default">
-	<a href="/changeimage/{{user}}">返回主页</a>
+	<a href="{%url 'index'%}">返回主页</a>
 </button>
 {% endblock %}
