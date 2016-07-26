@@ -30,10 +30,6 @@ def ajax_append_files(request):
         path = default_storage.save(data.name, ContentFile(data.read()))
     return HttpResponse(json.dumps(key_list), content_type="application/json")
 
-@csrf_exempt
-def ajax_search(request):
-    data = BBSPost.objects.filter(PContent__contains=request.POST['pat'])
-    print(data)
 
 def ajax_deal(request):
     print(request)
@@ -46,11 +42,21 @@ def ajax_deal(request):
     return HttpResponse('hello')
 
 
+def search_postbycontent(request,searchword):
+    if request.POST.get('search'):
+        return HttpResponseRedirect('/search/post/'+request.POST['search'])
+    user = request.user.bbsuser
+    posts = BBSPost.objects.filter(PContent__contains=searchword)
+    return render(request, 'searchPost.html', {'posts': posts, 'user': user})
+
+
 def update_time(request):
     return HttpResponseRedirect('/personal/' + request.user.username)
 
 
 def bbs_list(request):
+    if request.POST.get('search'):
+        return HttpResponseRedirect('/search/post/'+request.POST['search'])
     params = request.POST if request.method == 'POST' else None
     if request.user.is_anonymous():
         user = None
@@ -109,6 +115,8 @@ def follow_deal(request):
 
 
 def bbs_post_detail(request, param):
+    if request.POST.get('search'):
+        return HttpResponseRedirect('/search/post/'+request.POST['search'])
     threadID = int(param)
     if request.user.is_anonymous():
         user = None
