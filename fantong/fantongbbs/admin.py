@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import BBSUser, BBSPost, FollowUser, UserReportPost, UserLikePost, UserFollowPost
+from .models import BBSUser, BBSPost, FollowUser, UserReportPost, UserLikePost, UserFollowPost, Taginformation
 from django.contrib.auth.models import User
 
 
@@ -20,4 +20,5 @@ admin.site.register(FollowUser)
 admin.site.register(UserReportPost)
 admin.site.register(UserLikePost)
 admin.site.register(UserFollowPost)
+admin.site.register(Taginformation)
 # Register your models here.

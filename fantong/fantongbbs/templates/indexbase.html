@@ -104,14 +104,14 @@
 				</li>
 				<li><a href="#">小黑屋圈</a></li>
 			</ul>
-			<ul class="nav navbar-nav navbar-right myright">
+			<ul class="nav navbar-nav navbar-right">
 				{% if user.user.is_authenticated %}
 				<li><a href="/personal/{{user.user}}">个人主页</a></li>
 				<li><a href="/accounts/logout">登出</a></li>
 				{% else %}
 				<li><a href="/accounts/login">登录</a></li>
 				{% endif %}
-				<form action = "." method = "POST" class="navbar-form navbar-right" role="search">
+				<form action = "." method = "POST" class="navbar-form" role="search">
 					{% csrf_token %}
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search" name = "search">

@@ -72,19 +72,31 @@
                     <div class="col-lg-4">
                         <label for="id_PTagLocation">地区：</label>
                         <select id="id_PTagLocation" name="PTagLocation">
-
+                            {%for tag in tags%}
+                            {%ifequal tag.TClass '位置'%}
+                            <option value="{{tag.TInfo}}">{{tag.TInfo}}</option>
+                            {%endifequal%}
+                            {%endfor%}
                         </select>
                     </div>
                     <div class="col-lg-4">
                         <label for="id_PTagClass">菜系：</label>
                         <select id="id_PTagClass" name="PTagClass">
-
+                            {%for tag in tags%}
+                            {%ifequal tag.TClass '菜系'%}
+                            <option value="{{tag.TInfo}}">{{tag.TInfo}}</option>
+                            {%endifequal%}
+                            {%endfor%}
                         </select>
                     </div>
                     <div class="col-lg-4">
                         <label for="id_PTagPrice">价位：</label>
                         <select id="id_PTagPrice" name="PTagPrice">
-
+                            {%for tag in tags%}
+                            {%ifequal tag.TClass '价位'%}
+                            <option value="{{tag.TInfo}}">{{tag.TInfo}}</option>
+                            {%endifequal%}
+                            {%endfor%}
                         </select>
                     </div>
                 </div>

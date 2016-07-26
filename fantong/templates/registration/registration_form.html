@@ -3,9 +3,58 @@
 
 {% block content %}
 <form method="post" action=".">
-  {% csrf_token %}
-  {{ form.as_p }}
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <p>
+                    <div class="col-lg-2">
+                        <label for="id_username">用户名：</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="id_username" maxlength="30" name="username" type="text">
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="helptext">必需，最长30个字符，只可使用数字、字母以及@/./+/-/_</span>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-lg-2">
+                        <label for="id_email">邮箱：</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="id_email" name="email" type="email">
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="helptext">必需，请输入有效邮箱</span>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-lg-2">
+                        <label for="id_password1">密码：</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="id_password1" name="password1" type="password">
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="helptext">必需</span>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-lg-2">
+                        <label for="id_password2">确认密码：</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="id_password2" name="password2" type="password">
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="helptext">必需，请输入与之前同样的密码</span>
+                    </div>
+                </p>
+            </div>
+        </div>
+    </div>
 
-  <input type="submit" value="{% trans 'Submit' %}" />
+  <input type="submit" class="mybutton blue" value="提交"/>
 </form>
 {% endblock %}

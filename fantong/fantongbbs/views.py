@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import BBSPost, BBSUser, FollowUser, UserFollowPost, UserLikePost
+from .models import BBSPost, BBSUser, FollowUser, UserFollowPost, UserLikePost, Taginformation
 from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
 from django.views.decorators.csrf import csrf_exempt
@@ -91,10 +91,14 @@ def bbs_list(request):
         print(request.POST)
         post = form.save(commit=False)
         post.PUserID = request.user
+        post.PTagLocation = Taginformation.objects.filter(TClass='位置').get(TInfo=request.POST['PTagLocation'])
+        post.PTagClass = Taginformation.objects.filter(TClass='菜系').get(TInfo=request.POST['PTagClass'])
+        post.PTagPrice = Taginformation.objects.filter(TClass='价位').get(TInfo=request.POST['PTagPrice'])
         post.save()
         form = IndexPostForm()
     posts = BBSPost.objects.filter(PParentID__isnull=True).order_by('-PLastComTime')
-    return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user})
+    tags = Taginformation.objects.all()
+    return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user, 'tags': tags})
 
 
 def get_user(request, param):

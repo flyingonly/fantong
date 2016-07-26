@@ -1,24 +1,30 @@
 {% load i18n %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <link rel="stylesheet" href="{{ STATIC_URL }}style.css" />
+    <link rel="stylesheet" type="text/css" href="{% static "fantongbbs/index.css" %}"/>
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <title>{% block title %}User test{% endblock %}</title>
 </head>
 
 <body>
     <div id="header">
     {% block header %}
-    <a href="{% url 'index' %}">{% trans "Home" %}</a> | 
-
-    {% if user.is_authenticated %}
-        {% trans "Logged in" %}: {{ user.username }} 
-        (<a href="{% url 'auth_logout' %}">{% trans "Log out" %}</a>)
-    {% else %}
-       <a href="{% url 'auth_login' %}">{% trans "Log in" %}</a>
-    {% endif %}
-    <hr />
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{%url 'index'%}">清青饭桶</a>
+        </div>
+        <div class="kind">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{%url 'index'%}">论坛主页</a></li>
+            </ul>
+        </div>
+    </nav>
     {% endblock %}
     </div>
 

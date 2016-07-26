@@ -2,14 +2,39 @@
 {% load i18n %}
 
 {% block content %}
-<form method="post" action=".">
-  {% csrf_token %} 
-  {{ form.as_p }}
-
-  <input type="submit" value="{% trans 'Log in' %}" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
-<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <form method="post" action=".">
+                {% csrf_token %} 
+                <p>
+                    <label for="id_username">用户名：</label>
+                </p>
+                <p>
+                    <input id="id_username" maxlength="256" name="username" type="text">
+                </p>
+                <p>
+                    <label for="id_password">密码：</label>
+                </p>
+                <p>
+                    <input for="id_password" name="password" type="password">
+                </p>
+                <input type="submit" class="mybutton blue" value="{% trans 'Log in' %}" />
+                <input type="hidden" class="mybutton blue" name="next" value="{{ next }}" />
+            </form>
+            <p>
+                <div class="col-lg-3">
+                    <button type="button" class="btn btn-default">
+                        <a href="{% url 'registration_register' %}">注册</a>
+                    </button>   
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" class="btn btn-default">
+                        <a href="{% url 'index' %}">游客</a>
+                    </button>   
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}
