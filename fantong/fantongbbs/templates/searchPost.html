@@ -34,7 +34,17 @@
 				{% for post in posts %}
 				<tr>
 					<th class="col-lg-6">
-						<a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+                        {%if not post.PParentID %}
+						  <a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+                        {%else%}
+                        {%if post.PParentID %}
+                        {%if not post.PParentID.PParentID%}
+                          <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.id}}">回复：{{post.PParentID.PTitle}}</a>
+                        {%else%}
+                            <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.PParentID.id}}">回复：回复：{{post.PParentID.PParentID.PTitle}}</a>
+                        {%endif%}
+                        {%endif%}
+                        {%endif%}
 					</th>
 					<th class="col-lg-3">{{post.PUserID}}</th>
 					<th class="col-lg-3">{{post.PTime}}</th>

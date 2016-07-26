@@ -11,6 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 import os
+from django.utils import timezone
 import json
 
 
@@ -32,7 +33,7 @@ def ajax_append_files(request):
         ans_list.append(path)
     return HttpResponse(json.dumps(ans_list), content_type="application/json")
 
-
+@csrf_exempt
 def ajax_deal(request):
     print(request)
     post = BBSPost()
@@ -41,6 +42,8 @@ def ajax_deal(request):
     post.PParentID = Parent
     post.PContent = request.POST['PContent']
     post.save()
+    post.PParentID.PParentID.PLastComTime = post.PTime
+    post.PParentID.PParentID.save()
     return HttpResponse('hello')
 
 
@@ -81,7 +84,7 @@ def bbs_list(request):
         post.PUserID = request.user
         post.save()
         form = IndexPostForm()
-    posts = BBSPost.objects.filter(PParentID__isnull=True)
+    posts = BBSPost.objects.filter(PParentID__isnull=True).order_by('-PLastComTime')
     return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user})
 
 
@@ -146,13 +149,14 @@ def bbs_post_detail(request, param):
         post.PParentID = PPost
         post.save()
         form = PostForm()
-
+        post.PParentID.PLastComTime = post.PTime
+        post.PParentID.save()
     posts = list(BBSPost.objects.filter(id=threadID)) + \
         list(BBSPost.objects.filter(PParentID=threadID))
     for i in range(1, len(posts)):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id))
-    print(posts)
+    form = PostForm()
     return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
 
 

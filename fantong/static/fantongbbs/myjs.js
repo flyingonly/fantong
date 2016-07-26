@@ -10,7 +10,7 @@ $(function() {
                 data: { 'PParentID': pid, 'PContent': content },
                 success: function(data, textStatus) {
                     if (data == "hello") {
-                    window.location.reload()
+                    window.location.href = window.location.href
                 }
                 }
             })

@@ -18,7 +18,7 @@
 			<tbody>
 				{% for user in users %}
 				<tr>
-					<th class="col-lg-6"><a href="#">{{user.user.username}}</a></th>
+					<th class="col-lg-6"><a href="{%url 'personal' user.user%}">{{user.user.username}}</a></th>
 					<th class="col-lg-3">{{user.UPostNum}}</th>
 					<th class="col-lg-3">
 						123
