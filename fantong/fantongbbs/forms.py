@@ -11,7 +11,7 @@ class PostForm(forms.ModelForm):
 class IndexPostForm(forms.ModelForm):
     class Meta:
         model = BBSPost
-        fields = ('PTitle', 'PContent', 'PTagLocation', 'PTagClass', 'PTagPrice')
+        fields = ('PTitle', 'PContent', 'PTagLocation', 'PTagClass', 'PTagPrice','PKeywords')
 
 
 

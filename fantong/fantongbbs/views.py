@@ -11,16 +11,29 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 import os
+import json
 
 
 @csrf_exempt
 def ajax_append_image(request):
     data = request.FILES['file']
     path = default_storage.save(data.name, ContentFile(data.read()))
-    filepath = os.path.normpath(os.path.join(settings.MEDIA_ROOT, path))
-    print(filepath)
     return HttpResponse(data.name)
 
+
+@csrf_exempt
+def ajax_append_files(request):
+    data_list = request.FILES
+    key_list = list(data_list.keys())
+    for x in key_list:
+        data = data_list[x]
+        path = default_storage.save(data.name, ContentFile(data.read()))
+    return HttpResponse(json.dumps(key_list), content_type="application/json")
+
+@csrf_exempt
+def ajax_search(request):
+    data = BBSPost.objects.filter(PContent__contains=request.POST['pat'])
+    print(data)
 
 def ajax_deal(request):
     print(request)

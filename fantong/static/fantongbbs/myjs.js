@@ -36,4 +36,35 @@ $(function() {
         });
         alert("{%static asd %}")
     })
+    $('#file').bind("change", function() {
+        var formdata = new FormData()
+        for (var i = $(this).prop('files').length - 1; i >= 0; i--) {
+            formdata.append($(this).prop('files')[i].name,$(this).prop('files')[i])
+        }
+        console.log($(this).prop('files'));
+        $.ajax({
+            url: "/ajax_append_files/",
+            type: "POST",
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function(data, textStatus) {
+                for (var i = data.length - 1; i >= 0; i--) {
+                    $("form textarea").val($("form textarea").val() + "__data_start__" + data[i] + "__data_end__")
+                }
+            }
+        });
+        alert("{%static asd %}")
+    })
+    $('.navbar-form.navbar-right .btn.btn-default').bind("click",function () {
+        var s = $('.navbar-form.navbar-right .form-control').val()
+        $.ajax({
+            url: "/ajax_search/",
+            type: "post",
+            data: {'pat': s, },
+            success: function(data, textStatus) {
+                alert()
+            }
+        });
+    })
 });

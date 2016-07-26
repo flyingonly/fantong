@@ -12,6 +12,9 @@
     		p = s.match(/__url_start__(\S*?)__url_end__/)
     	}
     	$('#post_{{post.id}}').html(s)
+        if (!('{{post.PKeywords}}' === '')) {
+            $('#keyword_{{post.id}} th').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
+        }
     	{% endfor %}
     });
     </script>
@@ -39,6 +42,9 @@
 					<th class="col-lg-2">{{post.PUserID}}</th>
 					<th class="col-lg-2">{{post.PTime}}</th>
 				</tr>
+                <tr class="keywords" id="keyword_{{post.id}}">
+                    <th colspan=3>关键词:</th>
+                </tr>
 				{% endfor %}
 			</tbody>
 		</table>
@@ -49,6 +55,7 @@
 <div class="reply">
 	<hr>
 	<input id="fileImage" type="file" size="30"/>
+    <input id="file" type="file" size="30" multiple/>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{form.as_p}}
 		<button type="submit" class="save btn btn-default">发帖</button>
