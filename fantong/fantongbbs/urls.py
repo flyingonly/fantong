@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^ajax_append_image/$', views.ajax_append_image),
     url(r'^ajax_append_files/$', views.ajax_append_files),
     url(r'^search/post/(\w+)/$', views.search_postbycontent),
+    url(r'^search/user/(\w+)/$', views.search_userbyusername),
 ]
 

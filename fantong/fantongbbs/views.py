@@ -18,17 +18,19 @@ import json
 def ajax_append_image(request):
     data = request.FILES['file']
     path = default_storage.save(data.name, ContentFile(data.read()))
-    return HttpResponse(data.name)
+    return HttpResponse(path)
 
 
 @csrf_exempt
 def ajax_append_files(request):
     data_list = request.FILES
     key_list = list(data_list.keys())
+    ans_list = []
     for x in key_list:
         data = data_list[x]
         path = default_storage.save(data.name, ContentFile(data.read()))
-    return HttpResponse(json.dumps(key_list), content_type="application/json")
+        ans_list.append(path)
+    return HttpResponse(json.dumps(ans_list), content_type="application/json")
 
 
 def ajax_deal(request):
@@ -44,10 +46,21 @@ def ajax_deal(request):
 
 def search_postbycontent(request,searchword):
     if request.POST.get('search'):
-        return HttpResponseRedirect('/search/post/'+request.POST['search'])
+        return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
+    search = searchword.split("_")
+    posts = BBSPost.objects.all()
     user = request.user.bbsuser
-    posts = BBSPost.objects.filter(PContent__contains=searchword)
+    for searchthing in search:
+        if searchthing != '':
+            posts = posts.filter(PContent__contains=searchthing)
     return render(request, 'searchPost.html', {'posts': posts, 'user': user})
+
+def search_userbyusername(request,searchword):
+    if request.POST.get('search'):
+        return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
+    user = request.user.bbsuser
+    users = BBSUser.objects.filter(user__username__contains=searchword)
+    return render(request, 'searchUser.html', {'users': users, 'user': user})
 
 
 def update_time(request):
@@ -56,7 +69,7 @@ def update_time(request):
 
 def bbs_list(request):
     if request.POST.get('search'):
-        return HttpResponseRedirect('/search/post/'+request.POST['search'])
+        return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
     params = request.POST if request.method == 'POST' else None
     if request.user.is_anonymous():
         user = None
@@ -73,6 +86,8 @@ def bbs_list(request):
 
 
 def get_user(request, param):
+    if request.POST.get('search'):
+        return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
     if param == request.user.username:
         posts = BBSPost.objects.filter(PUserID=request.user)
         if BBSUser.objects.filter(user=request.user).exists():
@@ -116,7 +131,7 @@ def follow_deal(request):
 
 def bbs_post_detail(request, param):
     if request.POST.get('search'):
-        return HttpResponseRedirect('/search/post/'+request.POST['search'])
+        return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
     threadID = int(param)
     if request.user.is_anonymous():
         user = None
