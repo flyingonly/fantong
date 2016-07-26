@@ -95,7 +95,7 @@
 							<p class="userimg">
 								{% if miniPost.PUserID.bbsuser.UImage %}
 								{% load staticfiles %}
-								<a  href="/personal/{{miniPost.PUserID}}"><img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
+								<a href="/personal/{{miniPost.PUserID}}"><img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
 								{% endif %}
 							</p>
 							<p class="user">
@@ -108,7 +108,7 @@
 							</p>
 							{% if user.user.is_authenticated %}
 								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn" value="删除">
+									<input type="button" class="deleteBtn blue mybutton" value="删除">
 								{% endif %}
 							{% endif %}
 						</div>
@@ -135,7 +135,7 @@
 							</div>
 							{% if user.user.is_authenticated %}
 								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn" value="删除">
+									<input type="button" class="deleteBtn blue mybutton" value="删除">
 								{% endif %}
 							{% endif %}
 							<div class="postcontent col-lg-6" id = "post_{{miniPost.id}}">
@@ -151,7 +151,7 @@
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
 			{% csrf_token %}
 			{{form.as_p}}
-			<input type="button" class="save btn btn-default" postid = "{{miniPost.id}}" value="回复">
+			<input type="button" class="save btn btn-default blue mybutton" postid = "{{miniPost.id}}" value="回复">
 			</form>
 			{% endif %}	
 		{% endfor %}
@@ -180,17 +180,17 @@
 					</p>
 					{% if user.user.is_authenticated %}
 						{% if user.user == comPost.PUserID %}
-							<input type="button" class="deleteBtn" value="删除">
+							<input type="button" class="deleteBtn blue mybutton" value="删除">
 						{% else %}
 							{% if haveFollowed %}
-								<input type="button" class="followBtn" value="已收藏">
+								<input type="button" class="followBtn blue mybutton" value="已收藏">
 							{% else %}
-								<input type="button" class="followBtn" value="收藏">
+								<input type="button" class="followBtn blue mybutton" value="收藏">
 							{% endif %}
 							{% if haveLiked %}
-								<input type="button" class="likeBtn" value="已赞">
+								<input type="button" class="likeBtn blue mybutton" value="已赞">
 							{% else %}
-								<input type="button" class="likeBtn" value="点赞">
+								<input type="button" class="likeBtn blue mybutton" value="点赞">
 							{% endif %}
 						{% endif %}
 					{% endif %}
@@ -210,7 +210,7 @@
 	<form method="POST" class="post-form">
 		{% csrf_token %}
 		{{form.as_p}}
-		<button type="submit" class="save btn btn-default">回复</button>
+		<button type="submit" class="save btn btn-default blue mybutton">回复</button>
 	</form>
 </div>
 {% endif %}
