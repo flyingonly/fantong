@@ -32,9 +32,9 @@ $(function() {
             contentType: false,
             success: function(data, textStatus) {
                 $("form textarea").val($("form textarea").val() + "__url_start__" + data + "__url_end__")
+                alert("上传成功")
             }
         });
-        alert("{%static asd %}")
     })
     $('#file').bind("change", function() {
         var formdata = new FormData()
@@ -51,19 +51,8 @@ $(function() {
             success: function(data, textStatus) {
                 for (var i = data.length - 1; i >= 0; i--) {
                     $("form textarea").val($("form textarea").val() + "__data_start__" + data[i] + "__data_end__")
+                    alert("上传成功")
                 }
-            }
-        });
-        alert("{%static asd %}")
-    })
-    $('.navbar-form.navbar-right .btn.btn-default').bind("click",function () {
-        var s = $('.navbar-form.navbar-right .form-control').val()
-        $.ajax({
-            url: "/ajax_search/",
-            type: "post",
-            data: {'pat': s, },
-            success: function(data, textStatus) {
-                alert()
             }
         });
     })
