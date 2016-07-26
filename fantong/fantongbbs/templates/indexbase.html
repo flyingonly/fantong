@@ -15,6 +15,30 @@
     </script>
     <script type="text/javascript" src="{% static "fantongbbs/myjs.js" %}">
 	</script>
+    
+    <script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: "/ajax_get_tag/",
+            type: "GET",
+            success: function(response, status, xhr) {
+                for (var i = response.length - 1; i >= 0; i--) {
+                    if (response[i][0]=="位置") {
+                        $('#taglocation').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $("#id_PTagLocation").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
+                    }else if (response[i][0]=="菜系") {
+                        $('#tagclass').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $("#id_PTagClass").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
+                    }else{
+                        $('#tagprice').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $("#id_PTagPrice").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
+                    }
+                }
+                play(response)
+            }
+        });
+    })
+    </script>
     {%block js%}
     {%endblock%}
     <link rel="stylesheet" type="text/css" href="{% static "fantongbbs/index1.css" %}"/>
@@ -31,75 +55,27 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{%url 'index'%}">论坛主页</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						区域
 						<b class="caret"></b>
 					</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">海淀区</a></li>
-                        <li><a href="#">朝阳区</a></li>
-                        <li><a href="#">东城区</a></li>
-                        <li><a href="#">西城区</a></li>
-                        <li><a href="#">丰台区</a></li>
-                        <li><a href="#">石景山区</a></li>
-                        <li><a href="#">大兴区</a></li>
-                        <li><a href="#">通州区</a></li>
-                        <li><a href="#">昌平区</a></li>
-                        <li><a href="#">房山区</a></li>
-                        <li><a href="#">顺义区</a></li>
-                        <li><a href="#">门头沟区</a></li>
-                        <li><a href="#">怀柔区</a></li>
-                        <li><a href="#">平谷区</a></li>
-                        <li><a href="#">延庆县</a></li>
-                        <li><a href="#">密云县</a></li>
+                    <ul class="dropdown-menu" id="taglocation">
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						菜系
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">火锅</a></li>
-                        <li><a href="#">自助餐</a></li>
-                        <li><a href="#">咖啡厅</a></li>
-                        <li><a href="#">海鲜</a></li>
-                        <li><a href="#">烧烤</a></li>
-                        <li><a href="#">面包</a></li>
-                        <li><a href="#">甜点</a></li>
-                        <li><a href="#">韩国料理</a></li>
-                        <li><a href="#">日本菜</a></li>
-                        <li><a href="#">西餐</a></li>
-                        <li><a href="#">小吃快餐</a></li>
-                        <li><a href="#">北京菜</a></li>
-                        <li><a href="#">江浙菜</a></li>
-                        <li><a href="#">粤菜</a></li>
-                        <li><a href="#">清真菜</a></li>
-                        <li><a href="#">素菜</a></li>
-                        <li><a href="#">川菜</a></li>
-                        <li><a href="#">新疆菜</a></li>
-                        <li><a href="#">西北菜</a></li>
-                        <li><a href="#">东南亚菜</a></li>
-                        <li><a href="#">家常菜</a></li>
-                        <li><a href="#">云南菜</a></li>
-                        <li><a href="#">贵州菜</a></li>
-                        <li><a href="#">鲁菜</a></li>
-                        <li><a href="#">湖北菜</a></li>
-                        <li><a href="#">东北菜</a></li>
-                        <li><a href="#">湘菜</a></li>
-                        <li><a href="#">其他</a></li>
+					<ul class="dropdown-menu" id="tagclass">
 					</ul>
 				</li>
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						价位
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">50以下</a></li>
-						<li><a href="#">50-100</a></li>
-						<li><a href="#">100-300</a></li>
-						<li><a href="#">300以上</a></li>
+					<ul class="dropdown-menu" id="tagprice">
 					</ul>
 				</li>
 				<li><a href="#">小黑屋圈</a></li>

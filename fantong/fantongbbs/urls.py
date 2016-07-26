@@ -17,6 +17,6 @@ urlpatterns = [
     url(r'^search/user/(\w+)/$', views.search_userbyusername),
     url(r'^follow_post_deal/$', views.follow_post_deal),
     url(r'^like_post_deal/$', views.like_post_deal),
-    url(r'^delete_post_deal/$', views.delete_post_deal)
+    url(r'^delete_post_deal/$', views.delete_post_deal),
+    url(r'^ajax_get_tag/$', views.ajax_get_tag),
 ]
-

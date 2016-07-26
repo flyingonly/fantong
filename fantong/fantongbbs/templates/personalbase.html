@@ -27,6 +27,23 @@
 	        }
     		})
 	    })
+	    $(function () {
+        $.ajax({
+            url: "/ajax_get_tag/",
+            type: "GET",
+            success: function(response, status, xhr) {
+                for (var i = response.length - 1; i >= 0; i--) {
+                    if (response[i][0]=="位置") {
+                        $('#taglocation').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                    }else if (response[i][0]=="菜系") {
+                        $('#tagclass').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                    }else{
+                        $('#tagprice').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                    }
+                }
+            }
+        	});
+    	})
 	</script>
 	 {%block js%}
     {%endblock%}
@@ -45,59 +62,15 @@
 						区域
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">海淀区</a></li>
-						<li><a href="#">朝阳区</a></li>
-						<li><a href="#">东城区</a></li>
-						<li><a href="#">西城区</a></li>
-						<li><a href="#">丰台区</a></li>
-						<li><a href="#">石景山区</a></li>
-						<li><a href="#">大兴区</a></li>
-						<li><a href="#">通州区</a></li>
-						<li><a href="#">昌平区</a></li>
-						<li><a href="#">房山区</a></li>
-						<li><a href="#">顺义区</a></li>
-						<li><a href="#">门头沟区</a></li>
-						<li><a href="#">怀柔区</a></li>
-						<li><a href="#">平谷区</a></li>
-						<li><a href="#">延庆县</a></li>
-						<li><a href="#">密云县</a></li>
-					</ul>
+					<ul class="dropdown-menu" id="taglocation">
+                    </ul>
 				</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						菜系
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">火锅</a></li>
-						<li><a href="#">自助餐</a></li>
-						<li><a href="#">咖啡厅</a></li>
-						<li><a href="#">海鲜</a></li>
-						<li><a href="#">烧烤</a></li>
-						<li><a href="#">面包</a></li>
-						<li><a href="#">甜点</a></li>
-						<li><a href="#">韩国料理</a></li>
-						<li><a href="#">日本菜</a></li>
-						<li><a href="#">西餐</a></li>
-						<li><a href="#">小吃快餐</a></li>
-						<li><a href="#">北京菜</a></li>
-						<li><a href="#">江浙菜</a></li>
-						<li><a href="#">粤菜</a></li>
-						<li><a href="#">清真菜</a></li>
-						<li><a href="#">素菜</a></li>
-						<li><a href="#">川菜</a></li>
-						<li><a href="#">新疆菜</a></li>
-						<li><a href="#">西北菜</a></li>
-						<li><a href="#">东南亚菜</a></li>
-						<li><a href="#">家常菜</a></li>
-						<li><a href="#">云南菜</a></li>
-						<li><a href="#">贵州菜</a></li>
-						<li><a href="#">鲁菜</a></li>
-						<li><a href="#">湖北菜</a></li>
-						<li><a href="#">东北菜</a></li>
-						<li><a href="#">湘菜</a></li>
-						<li><a href="#">其他</a></li>
+					<ul class="dropdown-menu" id="tagclass">
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -105,11 +78,7 @@
 						价位
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">50以下</a></li>
-						<li><a href="#">50-100</a></li>
-						<li><a href="#">100-300</a></li>
-						<li><a href="#">300以上</a></li>
+					<ul class="dropdown-menu" id="tagprice">
 					</ul>
 				</li>
 				<ul class="nav navbar-nav navbar-right">

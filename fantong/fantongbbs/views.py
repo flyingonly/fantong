@@ -16,7 +16,16 @@ import json
 
 
 @csrf_exempt
-def ajax_change_nickname(request,userid):
+def ajax_get_tag(request):
+    tags = list(Taginformation.objects.all())
+    ans = []
+    for tag in tags:
+        ans.append([tag.TClass, tag.TInfo])
+    return HttpResponse(json.dumps(ans), content_type="application/json")
+
+
+@csrf_exempt
+def ajax_change_nickname(request, userid):
     user = BBSUser.objects.get(user=userid)
     user.UNickname = request.POST['content']
     user.save()
@@ -41,6 +50,7 @@ def ajax_append_files(request):
         ans_list.append(path)
     return HttpResponse(json.dumps(ans_list), content_type="application/json")
 
+
 @csrf_exempt
 def ajax_deal(request):
     print(request)
@@ -59,7 +69,7 @@ def ajax_deal(request):
 
 def search_postbycontent(request,searchword):
     if request.POST.get('search'):
-        return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
+        return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ", "_"))
     search = searchword.split("_")
     posts = BBSPost.objects.all()
     user = request.user.bbsuser

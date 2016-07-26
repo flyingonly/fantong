@@ -104,6 +104,22 @@
             })
         })
     });
+
+    function play(response) {
+        {%for comPost in posts %}
+        {%if forloop.first%}
+        for (var i = response.length - 1; i >= 0; i--) {
+            if (response[i][0]=="位置") {
+                $("#id_PTagLocation").val("{{comPost.PTagLocation}}");
+            }else if (response[i][0]=="菜系") {
+                $("#id_PTagClass").val("{{comPost.PTagClass}}");
+            }else{
+                $("#id_PTagPrice").val("{{comPost.PTagPrice}}");
+            }
+        }
+        {%endif%}
+        {%endfor%}
+    }
     </script>
 {% endblock %}
 
@@ -210,8 +226,46 @@
 					</p>
                     {% if user.user.is_authenticated %}
                         {% if user.user == comPost.PUserID or user.UAdmin %}
+                            <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label for="id_PTagLocation">地区：</label>
+                                    <select id="id_PTagLocation" name="PTagLocation">
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="id_PTagClass">菜系：</label>
+                                    <select id="id_PTagClass" name="PTagClass">
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="id_PTagPrice">价位：</label>
+                                    <select id="id_PTagPrice" name="PTagPrice">
+                                    </select>
+                                </div>
+                            </div>
+                            </div>
                             <input type="button" class="deleteBtn blue mybutton" id="delete{{comPost.id}}" value="删除">
 						{% else %}
+                            <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label for="id_TagLocation">地区：</label>
+                                    <span id="id_TagLocation">{{comPost.PTagLocation}}
+                                    </span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="id_TagClass">菜系：</label>
+                                    <span id="id_TagClass">{{comPost.PTagClass}}
+                                    </span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="id_TagPrice">价位：</label>
+                                    <span id="id_TagPrice">{{comPost.PTagPrice}}
+                                    </span>
+                                </div>
+                            </div>
+                            </div>
 							{% if haveFollowed %}
 								<input type="button" class="followBtn blue mybutton" value="已收藏">
 							{% else %}
