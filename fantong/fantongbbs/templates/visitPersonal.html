@@ -148,10 +148,24 @@
 						</thead>
 						<tbody>
 							{% for post in posts %}
-							<tr>
-								<td>{{post.PTitle}}</td>
-								<td>{{post.PTime}}</td>
-							</tr>
+								{% if not post.Pdelete %}
+								<tr>
+									<th class="col-lg-6">
+				                        {%if not post.PParentID %}
+										  <a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+				                        {%else%}
+				                        {%if post.PParentID %}
+				                        {%if not post.PParentID.PParentID%}
+				                          <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.id}}">回复：{{post.PParentID.PTitle}}</a>
+				                        {%else%}
+				                            <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.PParentID.id}}">回复：回复：{{post.PParentID.PParentID.PTitle}}</a>
+				                        {%endif%}
+				                        {%endif%}
+				                        {%endif%}
+									</th>
+									<th class="col-lg-3">{{post.PTime}}</th>
+								</tr>
+								{%endif%}
 							{% endfor %}
 						</tbody>
 					</table>

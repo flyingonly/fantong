@@ -28,6 +28,8 @@
     		})
 	    })
 	</script>
+	 {%block js%}
+    {%endblock%}
 </head>
 
 <body>
@@ -112,7 +114,7 @@
 				</li>
 				<ul class="nav navbar-nav navbar-right">
 					{% if user.user.is_authenticated %}
-					<li class="active"><a href="/personal/{{user.user}}"><span class="glyphicon glyphicon-user">个人主页</span></a></li>
+					<li class="active"><a href="/personal/{{request.user}}"><span class="glyphicon glyphicon-user">个人主页</span></a></li>
 					<li><a href="/accounts/logout">登出</a></li>
 					{% else %}
 					<li><a href="/accounts/login">登录</a></li>
@@ -144,27 +146,31 @@
 					{% endif %}
 				</p>
 				<p id="follows">
-					<div id="userfollow" class="col-lg-2">
+					<div id="userfollow" class="col-lg-6">
 						<p id="userfollownum">{{ user.UFollowUserNum }}</p>
 						<div id="ufollow">关注</div>
 					</div>
-					<div id="postrelease" class="col-lg-2">
+					<div id="postrelease" class="col-lg-6">
 						<p id="postreleasenum">{{ user.UPostNum }}</p>
 						<div id="prelease">发布</div>
 					</div>
 				</p>
+				<hr>
 				<p>
 					<div class="btn-group-vertical">
 						<button type="button" class="btn btn-default">
 							<a href="/changeimage/{{user.user}}">修改头像</a>
 						</button>
 					</div>
+					{% if request.user == user.user %}
 					<div class="btn-group-vertical">
 						<button type="button" class="btn btn-default">
 							<a href="/changepassword/{{user.user}}">修改密码</a>
 						</button>
 					</div>
+					{% endif %}
 				</p>
+				<hr>
 				<form method="POST" class="post-form" id="changename">{% csrf_token %}
 					<input type="text" id="nickname" />
 					<input type="button" class="save btn btn-default" value="修改昵称">

@@ -47,9 +47,11 @@ def ajax_deal(request):
     post = BBSPost()
     Parent = BBSPost.objects.get(id=int(request.POST['PParentID']))
     post.PUserID = request.user
+    request.user.bbsuser.UPostNum += 1
     post.PParentID = Parent
     post.PContent = request.POST['PContent']
     post.save()
+    request.user.bbsuser.save()
     post.PParentID.PParentID.PLastComTime = post.PTime
     post.PParentID.PParentID.save()
     return HttpResponse('hello')
@@ -91,12 +93,14 @@ def bbs_list(request):
         print(request.POST)
         post = form.save(commit=False)
         post.PUserID = request.user
+        request.user.bbsuser.UPostNum += 1
         post.PTagLocation = Taginformation.objects.filter(TClass='位置').get(TInfo=request.POST['PTagLocation'])
         post.PTagClass = Taginformation.objects.filter(TClass='菜系').get(TInfo=request.POST['PTagClass'])
         post.PTagPrice = Taginformation.objects.filter(TClass='价位').get(TInfo=request.POST['PTagPrice'])
         post.save()
+        request.user.bbsuser.save()
         form = IndexPostForm()
-    posts = BBSPost.objects.filter(PParentID__isnull=True).order_by('-PLastComTime')
+    posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PLastComTime')
     tags = Taginformation.objects.all()
     return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user, 'tags': tags})
 
@@ -105,14 +109,15 @@ def get_user(request, param):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
     if not request.user.is_anonymous():
-        if param == request.user.username:
-            posts = BBSPost.objects.filter(PUserID=request.user)
-            if BBSUser.objects.filter(user=request.user).exists():
-                user = BBSUser.objects.get(user=request.user)
+        if param == request.user.username or request.user.bbsuser.UAdmin:
+            hostUser = User.objects.get(username=param)
+            posts = BBSPost.objects.filter(PUserID=hostUser)
+            if BBSUser.objects.filter(user=hostUser).exists():
+                user = BBSUser.objects.get(user=hostUser)
             else:
                 newuser = BBSUser()
-                newuser.user = request.user
-                newuser.UNickname = request.user.username
+                newuser.user = hostUser
+                newuser.UNickname = hostUser.username
                 user = newuser
                 newuser.save()
             return render(request, 'personal.html', {'posts': posts, 'user': user})
@@ -200,16 +205,18 @@ def bbs_post_detail(request, param):
     if form.is_valid():
         post = form.save(commit=False)
         post.PUserID = request.user
+        request.user.bbsuser.UPostNum += 1
         post.PParentID = PPost
         post.save()
+        request.user.bbsuser.save()
         form = PostForm()
         post.PParentID.PLastComTime = post.PTime
         post.PParentID.save()
     posts = list(BBSPost.objects.filter(id=threadID)) + \
-        list(BBSPost.objects.filter(PParentID=threadID))
+        list(BBSPost.objects.filter(PParentID=threadID).filter(PDelete=False))
     for i in range(1, len(posts)):
         posts[i] = [posts[i]] + \
-            list(BBSPost.objects.filter(PParentID=posts[i].id))
+            list(BBSPost.objects.filter(PParentID=posts[i].id).filter(PDelete=False))
     form = PostForm()
     if posts[0].PUserID == user.user:
         return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
@@ -224,6 +231,31 @@ def bbs_post_detail(request, param):
             haveLiked = False
         return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user, 'haveFollowed': haveFollowed, 'haveLiked': haveLiked})
 
+
+@csrf_exempt
+def delete_post_deal(request):
+    post = BBSPost.objects.get(id=int(request.POST['postID']))
+    print(post.id)
+    comPosts = BBSPost.objects.filter(PParentID=post)
+    for comPost in comPosts:
+        miniPosts = BBSPost.objects.filter(PParentID=comPost)
+        for miniPost in miniPosts:
+            miniPost.PUserID.bbsuser.UPostNum -= 1
+            miniPost.PUserID.bbsuser.save()
+            miniPost.PDelete = True
+            miniPost.save()
+        comPost.PUserID.bbsuser.UPostNum -= 1
+        comPost.PUserID.bbsuser.save()
+        comPost.PDelete = True
+        comPost.save()
+    post.PUserID.bbsuser.UPostNum -= 1
+    post.PUserID.bbsuser.save()
+    post.PDelete = True
+    post.save()
+    if post.PParentID:
+        return HttpResponse("delete comment success")
+    else:
+        return HttpResponse("delete thread success")
 
 def change_password(request, username):
     error = []

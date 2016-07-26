@@ -84,6 +84,26 @@
     		})
     	})
     });
+
+    $(function(){
+        $('input.deleteBtn').bind("click", function(){
+            var postID = this.id;
+            postID = postID.replace("delete", "");
+            $.ajax({
+                url: '/delete_post_deal/',
+                type: 'POST',
+                data: {'postID': postID},
+                success: function(data, textStatus) {
+                    if (data == "delete comment success"){
+                        window.location.href = window.location.href;
+                    }
+                    else if (data == "delete thread success"){
+                        window.location.href = "{%url 'index'%}";
+                    } 
+                }
+            })
+        })
+    });
     </script>
 {% endblock %}
 
@@ -117,10 +137,10 @@
 								{{miniPost.PTime}}
 							</p>
 							{% if user.user.is_authenticated %}
-								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn blue mybutton" value="删除">
-								{% endif %}
-							{% endif %}
+                                {% if user.user == miniPost.PUserID or user.UAdmin%}
+                                    <input type="button" class="deleteBtn blue mybutton" id="delete{{miniPost.id}}" value="删除">
+                                {% endif %}
+                            {% endif %}
 						</div>
 						<div class="postcontent col-lg-9" id = "post_{{miniPost.id}}">
 							{{miniPost.PContent}}
@@ -144,10 +164,10 @@
 								{% endif %}
 							</div>
 							{% if user.user.is_authenticated %}
-								{% if user.user == miniPost.PUserID %}
-									<input type="button" class="deleteBtn blue mybutton" value="删除">
-								{% endif %}
-							{% endif %}
+                                {% if user.user == miniPost.PUserID or user.UAdmin %}
+                                    <input type="button" class="deleteBtn blue mybutton" id="delete{{miniPost.id}}" value="删除">
+                                {% endif %}
+                            {% endif %}
 							<div class="postcontent col-lg-6" id = "post_{{miniPost.id}}">
 								{{miniPost.PContent}}
 							</div>
@@ -188,9 +208,9 @@
 					<p class="LikeNum">
 						{{comPost.PLikeNum}} 个人觉得很赞
 					</p>
-					{% if user.user.is_authenticated %}
-						{% if user.user == comPost.PUserID %}
-							<input type="button" class="deleteBtn blue mybutton" value="删除">
+                    {% if user.user.is_authenticated %}
+                        {% if user.user == comPost.PUserID or user.UAdmin %}
+                            <input type="button" class="deleteBtn blue mybutton" id="delete{{comPost.id}}" value="删除">
 						{% else %}
 							{% if haveFollowed %}
 								<input type="button" class="followBtn blue mybutton" value="已收藏">

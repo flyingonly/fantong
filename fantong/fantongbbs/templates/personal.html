@@ -2,6 +2,25 @@
 
 {% block title %}{{user.user.username}}的个人主页{% endblock %}
 
+{% block js %}
+    <script type="text/javascript">
+    	$(function() {
+    	{% for post in posts %}
+    	var s = '{{post.PContent}}'
+    	p = s.match(/__url_start__(\S*?)__url_end__/)
+    	while (!(p === null)) {
+    		s = s.replace(p[0], "<img src='media/" + p[1] + "' />")
+    		p = s.match(/__url_start__(\S*?)__url_end__/)
+    	}
+    	$('#post_{{post.id}}').html(s)
+        if (!('{{post.PKeywords}}' === '')) {
+            $('#keyword_{{post.id}} td').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
+        }
+    	{% endfor %}
+    });
+    </script>
+{% endblock %}
+
 {% block content %}
 <div class="postinfo">
 	<table class="table table-striped">
@@ -13,10 +32,22 @@
 		</thead>
 		<tbody>
 			{% for post in posts %}
-			<tr>
-				<td>{{post.PTitle}}</td>
-				<td>{{post.PTime}}</td>
-			</tr>
+				<tr>
+					<th class="col-lg-6">
+                        {%if not post.PParentID %}
+						  <a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+                        {%else%}
+                        {%if post.PParentID %}
+                        {%if not post.PParentID.PParentID%}
+                          <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.id}}">回复：{{post.PParentID.PTitle}}</a>
+                        {%else%}
+                            <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.PParentID.id}}">回复：回复：{{post.PParentID.PParentID.PTitle}}</a>
+                        {%endif%}
+                        {%endif%}
+                        {%endif%}
+					</th>
+					<th class="col-lg-3">{{post.PTime}}</th>
+				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
