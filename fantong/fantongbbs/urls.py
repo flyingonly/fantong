@@ -8,11 +8,13 @@ urlpatterns = [
     url(r'changepassword/(.+)/$', views.change_password),
     url(r'^bbs_post_detail/(\d+)/$', views.bbs_post_detail, name='postDetail'),
     url(r'changeimage/(.+)/$', views.change_image),
-    url(r'^follow_deal/$', views.follow_deal),
+    url(r'^follow_user_deal/$', views.follow_user_deal),
     url(r'^ajax_deal/$', views.ajax_deal),
     url(r'^ajax_append_image/$', views.ajax_append_image),
     url(r'^ajax_append_files/$', views.ajax_append_files),
     url(r'^search/post/(\w+)/$', views.search_postbycontent),
     url(r'^search/user/(\w+)/$', views.search_userbyusername),
+    url(r'^follow_post_deal/$', views.follow_post_deal),
+    url(r'^like_post_deal/$', views.like_post_deal),
 ]
 

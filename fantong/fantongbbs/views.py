@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import BBSPost, BBSUser, FollowUser
+from .models import BBSPost, BBSUser, FollowUser, UserFollowPost, UserLikePost
 from .forms import PostForm, IndexPostForm
 from .forms import ChangepwdForm
 from django.views.decorators.csrf import csrf_exempt
@@ -62,7 +62,7 @@ def search_userbyusername(request,searchword):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
     user = request.user.bbsuser
-    users = BBSUser.objects.filter(user__username__contains=searchword)
+    users = BBSUser.objects.filter(UNickname__contains=searchword)
     return render(request, 'searchUser.html', {'users': users, 'user': user})
 
 
@@ -91,34 +91,37 @@ def bbs_list(request):
 def get_user(request, param):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
-    if param == request.user.username:
-        posts = BBSPost.objects.filter(PUserID=request.user)
-        if BBSUser.objects.filter(user=request.user).exists():
-            user = BBSUser.objects.get(user=request.user)
+    if not request.user.is_anonymous():
+        if param == request.user.username:
+            posts = BBSPost.objects.filter(PUserID=request.user)
+            if BBSUser.objects.filter(user=request.user).exists():
+                user = BBSUser.objects.get(user=request.user)
+            else:
+                newuser = BBSUser()
+                newuser.user = request.user
+                newuser.UNickname = user.username
+                user = newuser
+                newuser.save()
+            return render(request, 'personal.html', {'posts': posts, 'user': user})
         else:
-            newuser = BBSUser()
-            newuser.user = request.user
-            newuser.UNickname = user.username
-            user = newuser
-            newuser.save()
-        return render(request, 'personal.html', {'posts': posts, 'user': user})
+            visitedUser = User.objects.get(username=param)
+            visitedUser = BBSUser.objects.get(user=visitedUser)
+            posts = BBSPost.objects.filter(PUserID=visitedUser.user)
+            if FollowUser.objects.filter(User1ID=request.user, User2ID=visitedUser.user).exists():
+                haveFollowed = True
+            else:
+                haveFollowed = False
+            return render(request, 'visitPersonal.html', {'visitedUser': visitedUser, 'posts': posts, 'haveFollowed': haveFollowed})
     else:
-        visitedUser = User.objects.get(username=param)
-        visitedUser = BBSUser.objects.get(user=visitedUser)
-        posts = BBSPost.objects.filter(PUserID=visitedUser.user)
-        if FollowUser.objects.filter(User1ID=request.user, User2ID=visitedUser.user).exists():
-            haveFollowed = True
-        else:
-            haveFollowed = False
-        return render(request, 'visitPersonal.html', {'visitedUser': visitedUser, 'posts': posts, 'haveFollowed': haveFollowed})
+        return HttpResponse("请登录以查看他人信息")
 
-
-def follow_deal(request):
+@csrf_exempt
+def follow_user_deal(request):
     user1 = User.objects.get(id=int(request.POST['user1ID']))
     user1 = BBSUser.objects.get(user=user1)
     user2 = User.objects.get(id=int(request.POST['user2ID']))
     user2 = BBSUser.objects.get(user=user2)
-
+    print(12)
     if FollowUser.objects.filter(User1ID=user1.user, User2ID=user2.user).exists():
         FollowUser.objects.get(User1ID=user1.user, User2ID=user2.user).delete()
         user1.UFollowUserNum -= 1
@@ -132,6 +135,43 @@ def follow_deal(request):
         user1.save()
     return HttpResponse('follow success')
 
+@csrf_exempt
+def follow_post_deal(request):
+    user = User.objects.get(id=int(request.POST['userID']))
+    user = BBSUser.objects.get(user=user)
+    post = BBSPost.objects.get(id=int(request.POST['postID']))
+
+    if UserFollowPost.objects.filter(UserID=user.user, PostID=post).exists():
+        UserFollowPost.objects.get(UserID=user.user, PostID=post).delete()
+        user.UFollowPostNum -= 1
+        user.save()
+    else:
+        newFollowPost = UserFollowPost()
+        newFollowPost.UserID = user.user
+        newFollowPost.PostID = post
+        newFollowPost.save()
+        user.UFollowPostNum += 1
+        user.save()
+    return HttpResponse('follow success')
+
+@csrf_exempt
+def like_post_deal(request):
+    user = User.objects.get(id=int(request.POST['userID']))
+    user = BBSUser.objects.get(user=user)
+    post = BBSPost.objects.get(id=int(request.POST['postID']))
+
+    if UserLikePost.objects.filter(UserID=user.user, PostID=post).exists():
+        UserLikePost.objects.get(UserID=user.user, PostID=post).delete()
+        post.PLikeNum -= 1
+        post.save()
+    else:
+        newLikePost = UserLikePost()
+        newLikePost.UserID = user.user
+        newLikePost.PostID = post
+        newLikePost.save()
+        post.PLikeNum += 1
+        post.save()
+    return HttpResponse('follow success')
 
 def bbs_post_detail(request, param):
     if request.POST.get('search'):
@@ -158,7 +198,18 @@ def bbs_post_detail(request, param):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id))
     form = PostForm()
-    return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
+    if posts[0].PUserID == user.user:
+        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
+    else:
+        if UserFollowPost.objects.filter(UserID=request.user, PostID=posts[0]).exists():
+            haveFollowed = True
+        else:
+            haveFollowed = False
+        if UserLikePost.objects.filter(UserID=request.user, PostID=posts[0]).exists():
+            haveLiked = True
+        else:
+            haveLiked = False
+        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user, 'haveFollowed': haveFollowed, 'haveLiked': haveLiked})
 
 
 def change_password(request, username):
