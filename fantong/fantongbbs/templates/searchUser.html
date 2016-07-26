@@ -1,0 +1,32 @@
+﻿{% extends "indexbase.html" %}
+{% load staticfiles %}
+
+{% block title %}搜索用户结果{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<table>
+			<thead>
+				<caption>搜索结果</caption>
+				<tr>
+					<th class="col-lg-6">用户名</th>
+					<th class="col-lg-3">发帖数</th>
+					<th class="col-lg-3">状态</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+				<td>
+					<th class="col-lg-6"><a href="#">{{user.user.username}}</a></th>
+					<th class="col-lg-3">{{user.UPostNum}}</th>
+					<th class="col-lg-3">
+						
+					</th>
+				</td>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% end block %}
