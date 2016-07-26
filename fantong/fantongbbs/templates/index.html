@@ -40,9 +40,10 @@
 					</th>
 					<th class="col-lg-3">{{post.PUserID.bbsuser.UNickname}}</th>
 					<th class="col-lg-3">{{post.PTime}}</th>
-					<th class="col-lg-10 col-md-push-2">关键词:</th>
 				</tr>
-                    
+                <tr class="keywords" id="keyword_{{post.id}}">
+                    <th colspan=3>关键词:</th>
+                </tr>
 				{% endfor %}
 			</tbody>
 		</table>
@@ -56,7 +57,7 @@
     <input id="file" type="file" size="30" multiple/>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{form.as_p}}
-		<button type="submit" class="save btn btn-default">发帖</button>
+		<button type="submit" class="save btn btn-default mybutton blue">发帖</button>
 	</form>
 </div>
 {% endif %}

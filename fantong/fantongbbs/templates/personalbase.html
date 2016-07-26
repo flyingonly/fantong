@@ -143,6 +143,10 @@
 						<a href="/changepassword/{{user.user}}">修改密码</a>
 					</button>
 				</div>
+				<form method="POST" class="post-form">{% csrf_token %}
+					{{form.as_p}}
+					<button type="submit" class="save btn btn-default">修改昵称</button>
+				</form>
 			</div>
 			<div class="col-lg-8">
 				{% block content %}{% endblock %}
