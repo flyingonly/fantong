@@ -216,7 +216,8 @@
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
-	<input id="fileImage" type="file" size="30"/>
+    <label class="btn btn-default mybutton blue" for="fileImage">上传图片</label>
+	<input id="fileImage" type="file" style="position:absolute;clip:rect(0 0 0 0);"/>
 	<form method="POST" class="post-form">
 		{% csrf_token %}
 		<p>

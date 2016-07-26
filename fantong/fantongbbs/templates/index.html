@@ -12,7 +12,7 @@
     	}
     	$('#post_{{post.id}}').html(s)
         if (!('{{post.PKeywords}}' === '')) {
-            $('#keyword_{{post.id}} th').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
+            $('#keyword_{{post.id}} td').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
         }
     	{% endfor %}
     });
@@ -35,14 +35,14 @@
 			<tbody>
 				{% for post in posts %}
 				<tr>
-					<th class="col-lg-6">
+					<td class="col-lg-6">
 						<a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
-					</th>
-					<th class="col-lg-3">{{post.PUserID.bbsuser.UNickname}}</th>
-					<th class="col-lg-3">{{post.PTime}}</th>
+					</td>
+					<td class="col-lg-3">{{post.PUserID.bbsuser.UNickname}}</td>
+					<td class="col-lg-3">{{post.PTime}}</td>
 				</tr>
                 <tr class="keywords no-up-border" id="keyword_{{post.id}}">
-                    <th colspan=3>关键词:</th>
+                    <td style="border-top-style: none">关键词:</td>
                 </tr>
 				{% endfor %}
 			</tbody>
@@ -53,8 +53,10 @@
 {% if user.user.is_authenticated %}
 <div class="reply">
 	<hr>
-	<input id="fileImage" type="file" size="30"/>
-    <input id="file" type="file" size="30" multiple/>
+    <label class="btn btn-default mybutton blue" for="fileImage">上传图片</label>
+	<input id="fileImage" type="file" style="position:absolute;clip:rect(0 0 0 0);"/>
+    <label class="btn btn-default mybutton blue" for="file">上传文件</label>
+    <input id="file" type="file" size="30" multiple style="position:absolute;clip:rect(0 0 0 0);"/>
 	<form method="POST" class="post-form">{% csrf_token %}
 		<p>
             <label for="id_PTitle">标题：</label>
