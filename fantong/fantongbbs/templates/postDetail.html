@@ -4,27 +4,37 @@
 {%block js%}
     <script type="text/javascript">
     $(function() {
-    	{% for comPost in posts %}
-		{% if not forloop.first %}
-			{% for miniPost in comPost %}
-				var s = '{{miniPost.PContent}}'
-		    	p = s.match(/__url_start__(\S*?)__url_end__/)
-		    	while (!(p === null)) {
-		    		s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
-		    		p = s.match(/__url_start__(\S*?)__url_end__/)
-		    	}
-				$('#post_{{miniPost.id}}').html(s)
-			{% endfor %}
-		{% else %}
-		var s = '{{comPost.PContent}}'
-    	p = s.match(/__url_start__(\S*?)__url_end__/)
-    	while (!(p === null)) {
-    		s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
-    		p = s.match(/__url_start__(\S*?)__url_end__/)
-    	}
-    	$('#post_{{comPost.id}}').html(s)
-		{% endif %}
-		{% endfor %}
+        {% for comPost in posts %}
+        {% if not forloop.first %}
+            {% for miniPost in comPost %}
+                var s = '{{miniPost.PContent}}'
+                p = s.match(/__url_start__(\S*?)__url_end__/)
+                while (!(p === null)) {
+                    s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
+                    p = s.match(/__url_start__(\S*?)__url_end__/)
+                }
+                $('#post_{{miniPost.id}}').html(s)
+            {% endfor %}
+        {% else %}
+        var s = '{{comPost.PContent}}'
+        p = s.match(/__url_start__(\S*?)__url_end__/)
+        while (!(p === null)) {
+            s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
+            p = s.match(/__url_start__(\S*?)__url_end__/)
+        }
+        p = s.match(/__data_start__(\S*?)__data_end__/)
+        pli = new Array()
+        while (!(p === null)) {
+            pli[pli.length] = p[1]
+            s = s.replace(p[0], "")
+            p = s.match(/__data_start__(\S*?)__data_end__/)
+        }
+        for (var i = pli.length - 1; i >= 0; i--) {
+            $('div.threadPost .row').append($("<div><a href='{{BASE_DIR}}/media/" + pli[i] +  "' >" + pli[i] + "</a></div>"))
+        }
+        $('#post_{{comPost.id}}').html(s)
+        {% endif %}
+        {% endfor %}
     });
     </script>
 

@@ -98,6 +98,7 @@ def get_user(request, param):
         else:
             newuser = BBSUser()
             newuser.user = request.user
+            newuser.UNickname = user.username
             user = newuser
             newuser.save()
         return render(request, 'personal.html', {'posts': posts, 'user': user})

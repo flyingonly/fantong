@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class BBSUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    UNickname = models.TextField(blank=True)
     UImage = models.ImageField(null=True, blank=True)
     UAdmin = models.BooleanField(default=False)
     UFollowUserNum = models.IntegerField(default=0)
@@ -77,9 +78,9 @@ class BBSPost(models.Model):
         (u'100-300', u'100-300'),
         (u'300以上', u'300以上'),
     )
-    PTagLocation = models.CharField(max_length=50, choices=LOCATION_CHOICE, blank=True)
-    PTagClass = models.CharField(max_length=50, choices=CLASS_CHOICE, blank=True)
-    PTagPrice = models.CharField(max_length=50, choices=PRICE_CHOICE, blank=True)
+    PTagLocation = models.CharField(max_length=50, blank=True)
+    PTagClass = models.CharField(max_length=50, blank=True)
+    PTagPrice = models.CharField(max_length=50, blank=True)
     PKeywords = models.CharField(max_length=100, blank=True)
     PDelete = models.BooleanField(default=False)
     PLikeNum = models.IntegerField(default=0)
@@ -88,6 +89,10 @@ class BBSPost(models.Model):
     PEssential = models.BooleanField(default=False)
     PCheck = models.IntegerField(default=0)
     PLimit = models.IntegerField(default=0)
+    PReplyNum = models.IntegerField(default=0)
+    PTop = models.IntegerField(default=0)
+    PVisitNum = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.PTitle
