@@ -16,11 +16,14 @@
         function play(response) {
             for (var i = 0; i <= response.length - 1; i++) {
                 if (response[i][0]=="位置") {
-                    $('#PTagLocation').append("<input type=\"radio\" name=\"PTagLocation\" value=\""+response[i][1]+"\">"+response[i][1])
+                    $('#PTagLocation').append("<label class=\"btn btn-default mybutton blue\" for=\""+response[i][1]+"\" id=\"labelfor"+response[i][1]+"\">" + response[i][1] + "</label>")
+                    $('#PTagLocation').append("<input style=\"display:none\" type=\"radio\" name=\"PTagLocation\" value=\""+response[i][1]+"\" id = \"" + response[i][1] + "\">")
                 }else if (response[i][0]=="菜系") {
-                    $('#PTagClass').append("<input type=\"radio\" name=\"PTagClass\" value=\""+response[i][1]+"\">"+response[i][1])
+                    $('#PTagClass').append("<label class=\"btn btn-default mybutton blue\" for=\""+response[i][1]+"\" id=\"labelfor"+response[i][1]+"\">" + response[i][1] + "</label>")
+                    $('#PTagClass').append("<input style=\"display:none\" type=\"radio\" name=\"PTagClass\" value=\""+response[i][1]+"\" id = \"" + response[i][1] + "\">")
                 }else{
-                    $('#PTagPrice').append("<input type=\"radio\" name=\"PTagPrice\" value=\""+response[i][1]+"\">"+response[i][1])
+                    $('#PTagPrice').append("<label class=\"btn btn-default mybutton blue\" for=\""+response[i][1]+"\" id=\"labelfor"+response[i][1]+"\">" + response[i][1] + "</label>")
+                    $('#PTagPrice').append("<input style=\"display:none\" type=\"radio\" name=\"PTagPrice\" value=\""+response[i][1]+"\" id = \"" + response[i][1] + "\">")
                 }
             }
             var te = /\/search_by_tag\/.*/
@@ -46,15 +49,20 @@
                     pri = decodeURIComponent(pri)
                     $("input[name='PTagPrice'][value=" + pri + "]").attr("checked","checked");
                 }
+                $("#labelfor"+$('input:radio[name="PTagLocation"]:checked').attr('id')).addClass('active')
+                $("#labelfor"+$('input:radio[name="PTagClass"]:checked').attr('id')).addClass('active')
+                $("#labelfor"+$('input:radio[name="PTagPrice"]:checked').attr('id')).addClass('active')
             }else {
                 alert('发生了一些错误')
             }
             $('input:radio[name="PTagLocation"]').change(function (argument) {
                 loc = $('input:radio[name="PTagLocation"]:checked').val()
+
                 window.location.href = "/search_by_tag/" + loc + "_" + cla + "_" + pri + "/";
             })
             $('input:radio[name="PTagClass"]').change(function (argument) {
                 cla = $('input:radio[name="PTagClass"]:checked').val()
+
                 window.location.href = "/search_by_tag/" + loc + "_" + cla + "_" + pri + "/";
             })
             $('input:radio[name="PTagPrice"]').change(function (argument) {
@@ -69,14 +77,20 @@
 
 {% block content %}
 <div class="container">
-    <div id="PTagLocation">
-        <input type="radio" name="PTagLocation" value="" checked="checked">无
+    <div class="btn-group" id="PTagLocation">
+    <label class="control-label input-group">位置</label>
+        <label  class="btn btn-default mybutton blue" for="noneloc" id="labelfornoneloc">无</label>
+        <input type="radio" name="PTagLocation" value="" checked="checked" id="noneloc" style="display: none">
     </div>
-    <div id="PTagClass">
-        <input type="radio" name="PTagClass" value="" checked="checked">无
+    <div class="btn-group" id="PTagClass">
+    <label class="control-label input-group">菜系</label>
+        <label  class="btn btn-default mybutton blue" for="nonecla" id="labelfornonecla">无</label>
+        <input type="radio" name="PTagClass" value="" checked="checked" id="nonecla" style="display: none">
     </div>
-    <div id="PTagPrice">
-        <input type="radio" name="PTagPrice" value="" checked="checked">无
+    <div class="btn-group" id="PTagPrice">
+    <label class="control-label input-group">价位</label>
+        <label  class="btn btn-default mybutton blue" for="nonepri" id="labelfornonepri">无</label>
+        <input type="radio" name="PTagPrice" value="" checked="checked" id="nonepri" style="display: none">
     </div>
 </div>
 

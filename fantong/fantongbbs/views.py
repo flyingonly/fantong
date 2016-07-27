@@ -168,23 +168,34 @@ def bbs_list(request):
     return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user, 'tags': tags})
 
 
-def get_user(request, param):
+def get_user(request, param, param1):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
     if not request.user.is_anonymous():
         if User.objects.filter(username=param).exists():
             if param == request.user.username or request.user.bbsuser.UAdmin:
-                hostUser = User.objects.get(username=param)
-                posts = BBSPost.objects.filter(PUserID=hostUser)
-                if BBSUser.objects.filter(user=hostUser).exists():
+                if param1 == "":
+                    hostUser = User.objects.get(username=param)
+                    posts = BBSPost.objects.filter(PUserID=hostUser)
+                    if BBSUser.objects.filter(user=hostUser).exists():
+                        user = BBSUser.objects.get(user=hostUser)
+                    else:
+                        newuser = BBSUser()
+                        newuser.user = hostUser
+                        newuser.UNickname = hostUser.username
+                        user = newuser
+                        newuser.save()
+                    return render(request, 'personal.html', {'posts': posts, 'user': user})
+                elif param1 == "followPost":
+                    hostUser = User.objects.get(username=param)
+                    userFollowPosts = UserFollowPost.objects.filter(UserID=hostUser)
                     user = BBSUser.objects.get(user=hostUser)
-                else:
-                    newuser = BBSUser()
-                    newuser.user = hostUser
-                    newuser.UNickname = hostUser.username
-                    user = newuser
-                    newuser.save()
-                return render(request, 'personal.html', {'posts': posts, 'user': user})
+                    return render(request, 'personalFollowPost.html', {'userFollowPosts': userFollowPosts, 'user': user})
+                elif param1 == "followUser":
+                    hostUser = User.objects.get(username=param)
+                    userFollowUsers = FollowUser.objects.filter(User1ID=hostUser)
+                    user = BBSUser.objects.get(user=hostUser)
+                    return render(request, 'personalFollowUser.html', {'userFollowUsers': userFollowUsers, 'user': user})
             else:
                 visitedUser = User.objects.get(username=param)
                 visitedUser = BBSUser.objects.get(user=visitedUser)

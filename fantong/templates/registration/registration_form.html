@@ -5,6 +5,7 @@
 <form method="post" action=".">
     {% csrf_token %}
     <div class="container">
+    {{form.errors}}
         <div class="row">
             <div class="col-lg-10 col-md-offset-1">
                 <p>
@@ -19,6 +20,7 @@
                     </div>
                 </p>
             </div>
+
             <div class="col-lg-10 col-md-offset-1">
                 <p>
                     <div class="col-lg-2">
