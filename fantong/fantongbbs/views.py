@@ -96,7 +96,7 @@ def ajax_deal(request):
     post.PUserID = request.user
     request.user.bbsuser.UPostNum += 1
     post.PParentID = Parent
-    post.PContent = request.POST['PContent']
+    post.PContent = request.POST['PContent'].replace("\r\n","<br>")
     post.save()
     request.user.bbsuser.save()
     post.PParentID.PParentID.PLastComTime = post.PTime
@@ -145,6 +145,7 @@ def bbs_list(request):
         post = form.save(commit=False)
         post.PUserID = request.user
         request.user.bbsuser.UPostNum += 1
+        post.PContent = form.cleaned_data['PContent'].replace("\r\n","<br>")
         post.PTagLocation = Taginformation.objects.filter(TClass='位置').get(TInfo=request.POST['PTagLocation'])
         post.PTagClass = Taginformation.objects.filter(TClass='菜系').get(TInfo=request.POST['PTagClass'])
         post.PTagPrice = Taginformation.objects.filter(TClass='价位').get(TInfo=request.POST['PTagPrice'])
@@ -259,6 +260,7 @@ def bbs_post_detail(request, param):
     form = PostForm(params)
     if form.is_valid():
         post = form.save(commit=False)
+        post.PContent = form.cleaned_data['PContent'].replace("\r\n","<br>")
         post.PUserID = request.user
         request.user.bbsuser.UPostNum += 1
         PPost.PReplyNum += 1
