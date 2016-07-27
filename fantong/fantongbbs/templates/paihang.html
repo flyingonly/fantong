@@ -1,0 +1,56 @@
+{% extends "indexbase.html" %}
+{% load staticfiles %}
+    {% block js %}
+    <script type="text/javascript">
+        $(function() {
+        {% for post in posts %}
+        var s = '{{post.PContent}}'
+        p = s.match(/__url_start__(\S*?)__url_end__/)
+        while (!(p === null)) {
+            s = s.replace(p[0], "<img src='media/" + p[1] + "' />")
+            p = s.match(/__url_start__(\S*?)__url_end__/)
+        }
+        $('#post_{{post.id}}').html(s)
+        if (!('{{post.PKeywords}}' === '')) {
+            $('#keyword_{{post.id}} td').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
+        }
+        {% endfor %}
+    });
+    </script>
+{% endblock %}
+
+{% block title %}论坛主页{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <caption align="top">{{mode}}</caption>
+            <thead>
+                <tr>
+                    <th class="col-lg-4">帖子标题</th>
+                    <th class="col-lg-2">发帖人</th>
+                    <th class="col-lg-3">发帖时间</th>
+                    <th class="col-lg-3">最后回复时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td class="col-lg-4">
+                        <a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+                    </td>
+                    <td class="col-lg-2">{{post.PUserID.bbsuser.UNickname}}</td>
+                    <td class="col-lg-3">{{post.PTime}}</td>
+                    <td class="col-lg-3">{{post.PLastComTime}}</td>
+                </tr>
+                <tr class="keywords no-up-border" id="keyword_{{post.id}}">
+                    <td style="border-top-style: none">关键词:</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

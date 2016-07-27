@@ -14,6 +14,24 @@ import os
 from django.utils import timezone
 import json
 
+def rank(request, param):
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = request.user.bbsuser
+    if param == "visit":
+        posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PVisitNum')
+        mode = "访问量排行"
+    elif param == "like":
+        posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PLikeNum')
+        mode = "点赞数排行"
+    elif param == "reply":
+        posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PReplyNum')
+        mode = "回复数排行"
+    else:
+        posts = None
+    return render(request, 'paihang.html', {'posts': posts, 'user': user, 'mode': mode})
+
 
 def search_by_tag(request, inputword):
     if request.user.is_anonymous():
@@ -82,6 +100,7 @@ def ajax_deal(request):
     post.save()
     request.user.bbsuser.save()
     post.PParentID.PParentID.PLastComTime = post.PTime
+    post.PParentID.PParentID.PReplyNum += 1
     post.PParentID.PParentID.save()
     return HttpResponse('hello')
 
@@ -89,9 +108,12 @@ def ajax_deal(request):
 def search_postbycontent(request,searchword):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ", "_"))
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = request.user.bbsuser
     search = searchword.split("_")
     posts = BBSPost.objects.all()
-    user = request.user.bbsuser
     for searchthing in search:
         if searchthing != '':
             posts = posts.filter(PContent__contains=searchthing)
@@ -232,18 +254,21 @@ def bbs_post_detail(request, param):
     else:
         user = BBSUser.objects.get(user=request.user)
     PPost = BBSPost.objects.get(id=threadID)
+    PPost.PVisitNum += 1
     params = request.POST if request.method == 'POST' else None
     form = PostForm(params)
     if form.is_valid():
         post = form.save(commit=False)
         post.PUserID = request.user
         request.user.bbsuser.UPostNum += 1
+        PPost.PReplyNum += 1
         post.PParentID = PPost
         post.save()
         request.user.bbsuser.save()
         form = PostForm()
         post.PParentID.PLastComTime = post.PTime
         post.PParentID.save()
+    PPost.save()
     posts = list(BBSPost.objects.filter(id=threadID)) + \
         list(BBSPost.objects.filter(PParentID=threadID).filter(PDelete=False))
     for i in range(1, len(posts)):

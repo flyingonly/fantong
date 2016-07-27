@@ -192,6 +192,7 @@
 				</div>
 			{% endif %}
 		{% endfor %}
+        {% if user.user.is_authenticated %}
 		{% for miniPost in comPost %}
 			{% if forloop.first %}
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
@@ -204,6 +205,7 @@
 			</form>
 			{% endif %}	
 		{% endfor %}
+        {%endif%}
 	{% else %}
 	<div class="threadPost">
 		<h2>{{comPost.PTitle}}</h2>
