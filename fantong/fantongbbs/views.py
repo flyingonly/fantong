@@ -131,6 +131,17 @@ def update_time(request):
     return HttpResponseRedirect('/personal/' + request.user.username)
 
 
+@csrf_exempt
+def top_post_deal(request):
+    post = BBSPost.objects.get(id=int(request.POST['postID']))
+    if post.PTop > 0:
+        post.PTop = 0
+        post.save()
+    else:
+        post.PTop = 1
+        post.save()
+    return HttpResponse('top success')
+
 def bbs_list(request):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
@@ -152,7 +163,7 @@ def bbs_list(request):
         post.save()
         request.user.bbsuser.save()
         form = IndexPostForm()
-    posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PLastComTime')
+    posts = BBSPost.objects.filter(PParentID__isnull=True).filter(PDelete=False).order_by('-PTop','-PLastComTime')
     tags = Taginformation.objects.all()
     return render(request, 'index.html', {'posts': posts, 'form': form, 'user': user, 'tags': tags})
 
@@ -246,10 +257,11 @@ def like_post_deal(request):
         post.save()
     return HttpResponse('follow success')
 
-def bbs_post_detail(request, param):
+def bbs_post_detail(request, param, param1):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/post/'+request.POST['search'].replace(" ","_"))
     threadID = int(param)
+    OPonly = False
     if request.user.is_anonymous():
         user = None
     else:
@@ -271,14 +283,20 @@ def bbs_post_detail(request, param):
         post.PParentID.PLastComTime = post.PTime
         post.PParentID.save()
     PPost.save()
-    posts = list(BBSPost.objects.filter(id=threadID)) + \
-        list(BBSPost.objects.filter(PParentID=threadID).filter(PDelete=False))
+    if param1 == "OPonly":
+        OPonly = True
+        startPost = BBSPost.objects.get(id=threadID)
+        posts = list(BBSPost.objects.filter(id=threadID)) + \
+            list(BBSPost.objects.filter(PParentID=threadID).filter(PDelete=False).filter(PUserID=startPost.PUserID))
+    else:
+        posts = list(BBSPost.objects.filter(id=threadID)) + \
+            list(BBSPost.objects.filter(PParentID=threadID).filter(PDelete=False))
     for i in range(1, len(posts)):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id).filter(PDelete=False))
     form = PostForm()
     if user == None or posts[0].PUserID == user.user:
-        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
+        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user, 'OPonly': OPonly})
     else:
         if UserFollowPost.objects.filter(UserID=request.user, PostID=posts[0]).exists():
             haveFollowed = True
@@ -288,7 +306,7 @@ def bbs_post_detail(request, param):
             haveLiked = True
         else:
             haveLiked = False
-        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user, 'haveFollowed': haveFollowed, 'haveLiked': haveLiked})
+        return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user, 'haveFollowed': haveFollowed, 'haveLiked': haveLiked, 'OPonly':OPonly})
 
 
 @csrf_exempt

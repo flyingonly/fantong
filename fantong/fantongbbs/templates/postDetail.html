@@ -121,7 +121,40 @@
         {%endif%}
         {%endfor%}
     }
+
+    $(function() {
+        $('input.topBtn').bind("click", function(){
+            if(this.value == '取消置顶'){
+                this.value = '置顶';
+            }
+            else{
+                this.value = '取消置顶';
+            }
+            var postID;
+            {% for comPost in posts %}
+                {% if forloop.first %}
+                    postID = {{comPost.id}};
+                {% endif %}
+            {% endfor %}
+            $.ajax({
+                url: '/top_post_deal/',
+                type: 'POST',
+                data: {'postID': postID}
+            })
+        })
+    });
+    $(function(){
+        $('input.OPonlyBtn').bind("click", function(){
+            {% if OPonly %}
+            window.location.href = window.location.href.replace("OPonly", "")
+            {% else %}
+            window.location.href = window.location.href + "OPonly"
+            {% endif %}
+        })
+    });
     </script>
+
+
 {% endblock %}
 
 {% block content %}
@@ -129,6 +162,11 @@
 <button type="button" class="btn btn-default">
 	<a href="{%url 'index'%}">返回主页</a>
 </button>
+{% if OPonly %}
+<input type="button" class="OPonlyBtn blue mybutton" value="查看全帖">
+{% else %}
+<input type="button" class="OPonlyBtn blue mybutton" value="只看楼主">
+{% endif %}
 </div>
 {% for comPost in posts %}
 	{% if not forloop.first %}
@@ -193,7 +231,7 @@
 				</div>
 			{% endif %}
 		{% endfor %}
-        {% if user.user.is_authenticated %}
+        {% if user.user.is_authenticated and not user.UForbidden%}
 		{% for miniPost in comPost %}
 			{% if forloop.first %}
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
@@ -210,6 +248,11 @@
 	{% else %}
 	<div class="threadPost">
 		<h2>{{comPost.PTitle}}</h2>
+        {% if comPost.PTop %}
+            <input type="button" class="topBtn blue mybutton" value="取消置顶">
+        {% else %}
+            <input type="button" class="topBtn blue mybutton" value="置顶">
+        {% endif %} 
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-3">
@@ -230,10 +273,16 @@
 					<p class="LikeNum">
 						{{comPost.PLikeNum}} 个人觉得很赞
 					</p>
+
+				</div>
+				<div class="postcontent col-lg-9" id = "post_{{comPost.id}}">
+					{{comPost.PContent|safe}}
+				</div>
+
+			</div>
+            <div class="row">
                     {% if user.user.is_authenticated %}
                         {% if user.user == comPost.PUserID or user.UAdmin %}
-                            <div class="container">
-                            <div class="row">
                                 <div class="col-lg-4">
                                     <label for="id_PTagLocation">地区：</label>
                                     <select id="id_PTagLocation" name="PTagLocation">
@@ -249,12 +298,8 @@
                                     <select id="id_PTagPrice" name="PTagPrice">
                                     </select>
                                 </div>
-                            </div>
-                            </div>
                             <input type="button" class="deleteBtn blue mybutton" id="delete{{comPost.id}}" value="删除">
-						{% else %}
-                            <div class="container">
-                            <div class="row">
+                        {% else %}
                                 <div class="col-lg-4">
                                     <label for="id_TagLocation">地区：</label>
                                     <span id="id_TagLocation">{{comPost.PTagLocation}}
@@ -270,30 +315,24 @@
                                     <span id="id_TagPrice">{{comPost.PTagPrice}}
                                     </span>
                                 </div>
-                            </div>
-                            </div>
-							{% if haveFollowed %}
-								<input type="button" class="followBtn blue mybutton" value="已收藏">
-							{% else %}
-								<input type="button" class="followBtn blue mybutton" value="收藏">
-							{% endif %}
-							{% if haveLiked %}
-								<input type="button" class="likeBtn blue mybutton" value="已赞">
-							{% else %}
-								<input type="button" class="likeBtn blue mybutton" value="点赞">
-							{% endif %}
-						{% endif %}
-					{% endif %}
-				</div>
-				<div class="postcontent col-lg-9" id = "post_{{comPost.id}}">
-					{{comPost.PContent|safe}}
-				</div>
-			</div>
+                            {% if haveFollowed %}
+                                <input type="button" class="followBtn blue mybutton" value="已收藏">
+                            {% else %}
+                                <input type="button" class="followBtn blue mybutton" value="收藏">
+                            {% endif %}
+                            {% if haveLiked %}
+                                <input type="button" class="likeBtn blue mybutton" value="已赞">
+                            {% else %}
+                                <input type="button" class="likeBtn blue mybutton" value="点赞">
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
 		</div>
 	</div>
 	{% endif %}
 {% endfor %}
-{% if user.user.is_authenticated %}
+{% if user.user.is_authenticated and not user.UForbidden%}
 <div class="reply">
 	<hr>
     <label class="btn btn-default mybutton blue" for="fileImage">上传图片</label>
