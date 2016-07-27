@@ -19,5 +19,7 @@ urlpatterns = [
     url(r'^like_post_deal/$', views.like_post_deal),
     url(r'^delete_post_deal/$', views.delete_post_deal),
     url(r'^ajax_get_tag/$', views.ajax_get_tag),
-    url(r'^search_by_tag/(.+)/$', views.search_by_tag)
+    url(r'^search_by_tag/(.+)/$', views.search_by_tag),
+    url(r'^forbid_user_deal/$', views.forbid_user_deal),
+    url(r'^delete_user_deal/(\w+)/$', views.delete_user_deal),
 ]

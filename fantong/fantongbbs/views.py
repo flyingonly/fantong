@@ -16,8 +16,11 @@ import json
 
 
 def search_by_tag(request, inputword):
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = request.user.bbsuser
     searchs = inputword.split('_')
-    user = request.user.bbsuser
     posts = BBSPost.objects.filter(PParentID=None).filter(PDelete=False)
     if len(searchs) == 3:
         if searchs[0] != '':
@@ -135,27 +138,30 @@ def get_user(request, param):
     if request.POST.get('search'):
         return HttpResponseRedirect('/search/user/'+request.POST['search'].replace(" ", ''))
     if not request.user.is_anonymous():
-        if param == request.user.username or request.user.bbsuser.UAdmin:
-            hostUser = User.objects.get(username=param)
-            posts = BBSPost.objects.filter(PUserID=hostUser)
-            if BBSUser.objects.filter(user=hostUser).exists():
-                user = BBSUser.objects.get(user=hostUser)
+        if User.objects.filter(username=param).exists():
+            if param == request.user.username or request.user.bbsuser.UAdmin:
+                hostUser = User.objects.get(username=param)
+                posts = BBSPost.objects.filter(PUserID=hostUser)
+                if BBSUser.objects.filter(user=hostUser).exists():
+                    user = BBSUser.objects.get(user=hostUser)
+                else:
+                    newuser = BBSUser()
+                    newuser.user = hostUser
+                    newuser.UNickname = hostUser.username
+                    user = newuser
+                    newuser.save()
+                return render(request, 'personal.html', {'posts': posts, 'user': user})
             else:
-                newuser = BBSUser()
-                newuser.user = hostUser
-                newuser.UNickname = hostUser.username
-                user = newuser
-                newuser.save()
-            return render(request, 'personal.html', {'posts': posts, 'user': user})
+                visitedUser = User.objects.get(username=param)
+                visitedUser = BBSUser.objects.get(user=visitedUser)
+                posts = BBSPost.objects.filter(PUserID=visitedUser.user)
+                if FollowUser.objects.filter(User1ID=request.user, User2ID=visitedUser.user).exists():
+                    haveFollowed = True
+                else:
+                    haveFollowed = False
+                return render(request, 'visitPersonal.html', {'visitedUser': visitedUser, 'posts': posts, 'haveFollowed': haveFollowed})
         else:
-            visitedUser = User.objects.get(username=param)
-            visitedUser = BBSUser.objects.get(user=visitedUser)
-            posts = BBSPost.objects.filter(PUserID=visitedUser.user)
-            if FollowUser.objects.filter(User1ID=request.user, User2ID=visitedUser.user).exists():
-                haveFollowed = True
-            else:
-                haveFollowed = False
-            return render(request, 'visitPersonal.html', {'visitedUser': visitedUser, 'posts': posts, 'haveFollowed': haveFollowed})
+            return HttpResponse("该用户不存在")
     else:
         return HttpResponse("请登录以查看他人信息")
 
@@ -165,7 +171,7 @@ def follow_user_deal(request):
     user1 = BBSUser.objects.get(user=user1)
     user2 = User.objects.get(id=int(request.POST['user2ID']))
     user2 = BBSUser.objects.get(user=user2)
-    print(12)
+
     if FollowUser.objects.filter(User1ID=user1.user, User2ID=user2.user).exists():
         FollowUser.objects.get(User1ID=user1.user, User2ID=user2.user).delete()
         user1.UFollowUserNum -= 1
@@ -244,7 +250,7 @@ def bbs_post_detail(request, param):
         posts[i] = [posts[i]] + \
             list(BBSPost.objects.filter(PParentID=posts[i].id).filter(PDelete=False))
     form = PostForm()
-    if posts[0].PUserID == user.user:
+    if user == None or posts[0].PUserID == user.user:
         return render(request, 'postDetail.html', {'posts': posts, 'form': form, 'user': user})
     else:
         if UserFollowPost.objects.filter(UserID=request.user, PostID=posts[0]).exists():
@@ -318,3 +324,57 @@ def change_image(request, username):
         user.save()
     posts = BBSUser.objects.all()
     return render(request, 'revisehead.html', {'posts': posts, 'user': user})
+
+@csrf_exempt
+def forbid_user_deal(request):
+    user = User.objects.get(id=int(request.POST['toBeForbiddenUserID']))
+    user = BBSUser.objects.get(user=user)
+    if user.UForbidden:
+        user.UForbidden = False
+    else:
+        user.UForbidden = True
+    user.save()
+    return HttpResponse('forbid success')
+
+@csrf_exempt
+def delete_user_deal(request, param):
+    if request.user.bbsuser.UAdmin:
+        user = User.objects.get(username=param)
+        #删除帖子
+        posts = BBSPost.objects.filter(PUserID=user).order_by('-PTime')
+        for post in posts:
+            comPosts = BBSPost.objects.filter(PParentID=post)
+            for comPost in comPosts:
+                miniPosts = BBSPost.objects.filter(PParentID=comPost)
+                for miniPost in miniPosts:
+                    miniPost.PUserID.bbsuser.UPostNum -= 1
+                    miniPost.PUserID.bbsuser.save()
+                    UserFollowPost.objects.filter(PostID=miniPost).delete()
+                    UserLikePost.objects.filter(PostID=miniPost).delete()
+                    miniPost.delete()
+                comPost.PUserID.bbsuser.UPostNum -= 1
+                comPost.PUserID.bbsuser.save()
+                UserFollowPost.objects.filter(PostID=comPost).delete()
+                UserLikePost.objects.filter(PostID=comPost).delete()
+                comPost.delete()
+            post.PUserID.bbsuser.UPostNum -= 1
+            post.PUserID.bbsuser.save()
+            UserFollowPost.objects.filter(PostID=post).delete()
+            UserLikePost.objects.filter(PostID=post).delete()
+            post.delete()
+        #删除用户关注关系
+        FollowUser.objects.filter(User1ID=user).delete()
+        followUsers = FollowUser.objects.filter(User2ID=user)
+        for followUser in followUsers:
+            followUser.User1ID.bbsuser.UFollowUserNum -= 1
+        followUsers.delete()
+        #删除用户收藏帖子关系
+        UserFollowPost.objects.filter(UserID=user).delete()
+        #删除用户点赞帖子关系
+        UserLikePost.objects.filter(UserID=user).delete()
+
+        user.bbsuser.delete()
+        user.delete()
+        return HttpResponse('用户已被删除')
+    else:
+        return HttpResponse('没有权限')

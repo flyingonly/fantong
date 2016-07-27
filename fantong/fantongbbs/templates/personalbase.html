@@ -44,6 +44,37 @@
             }
         	});
     	})
+    	$(function(){
+ 	    	$('input.forbidBtn').bind("click", function(){
+ 	    		if (this.value == '已禁言')
+ 	    		{
+ 	    			this.value = '禁言';
+ 	    		}
+ 	    		else
+ 	    		{
+ 	    			this.value = '已禁言';
+ 	    		}
+ 	    		var toBeForbiddenUserID = {{user.user.id}};
+ 	    		$.ajax({
+ 	    			url: '/forbid_user_deal/',
+ 	    			type: 'POST',
+ 	    			data: {'toBeForbiddenUserID': toBeForbiddenUserID},
+ 	    			success: function(data, textStatus){
+ 
+ 	    			}
+ 	    		})
+ 	    	})
+ 	    })
+ 
+ 	    $(function(){
+ 	    	$('input.deleteUserBtn').bind("click", function(){
+ 	    		var r = confirm("确定要删除该用户吗？删除后用户信息与发帖信息将无法恢复！");
+ 	    		if (r == true)
+ 	    		{
+ 	    			window.location.href = "/delete_user_deal/" + "{{user.user.username}}" + "/";
+ 	    		}
+ 	    	})
+ 	    })
 	</script>
 	 {%block js%}
     {%endblock%}
@@ -137,6 +168,13 @@
 							<a href="/changepassword/{{user.user}}">修改密码</a>
 						</button>
 					</div>
+					{% else %}											
+ 						{% if user.UForbidden %}
+ 						<input type="button" class="forbidBtn mybutton blue" value="已禁言">
+ 						{% else %}
+ 						<input type="button" class="forbidBtn mybutton blue" value="禁言">
+ 						{% endif %}
+ 						<input type="button" class="deleteUserBtn mybutton blue" value="删除用户">
 					{% endif %}
 				</p>
 				<hr>
