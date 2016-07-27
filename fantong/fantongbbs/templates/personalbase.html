@@ -82,22 +82,22 @@
 
 <body>
 	<nav class="navbar navbar-default" role="navigation">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="{%url 'index'%}">清青饭桶</a>
-		</div>
-		<div class="kind">
-			<ul class="nav navbar-nav">
-				<li><a href="{%url 'index'%}"><span class="glyphicon glyphicon-home">论坛主页</span></a></li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{%url 'index'%}">清青饭桶</a>
+        </div>
+        <div class="kind">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{%url 'index'%}">论坛主页</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						区域
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu" id="taglocation">
+                    <ul class="dropdown-menu" id="taglocation">
                     </ul>
-				</li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						菜系
 						<b class="caret"></b>
 					</a>
@@ -105,29 +105,30 @@
 					</ul>
 				</li>
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" >
 						价位
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu" id="tagprice">
 					</ul>
 				</li>
-				<ul class="nav navbar-nav navbar-right">
-					{% if user.user.is_authenticated %}
-					<li class="active"><a href="/personal/{{request.user}}"><span class="glyphicon glyphicon-user">个人主页</span></a></li>
-					<li><a href="/accounts/logout">登出</a></li>
-					{% else %}
-					<li><a href="/accounts/login">登录</a></li>
-					{% endif %}
-					<form action = "." method = "POST" class="navbar-form navbar-right" role="search">
-						{% csrf_token %}
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Search" name = "search">
-						</div>
-						<button type="submit" class="btn btn-default">搜索</button>
-					</form>
-				</ul>
+				<li><a href="#">小黑屋圈</a></li>
 			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{% if user.user.is_authenticated %}
+				<li><a href="/personal/{{user.user}}">个人主页</a></li>
+				<li><a href="/accounts/logout">登出</a></li>
+				{% else %}
+				<li><a href="/accounts/login">登录</a></li>
+				{% endif %}
+			</ul>
+            <form action = "." method = "POST" class="navbar-form navbar-right" role="search">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search" name = "search">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
 		</div>
 	</nav>
 	<div class="container">
@@ -136,7 +137,7 @@
 				<div id="username">{{user.UNickname}}</div>
 				{% if user.UImage %}
 				{% load staticfiles %}
-				<img src="{{user.UImage.url}}" alt="Your img"/>
+				<img src="{{user.UImage.url}}" alt="Your img"  height="230" width="230"/>
 				{% endif %}
 				<p id="status">
 					{% if not user.UForbidden %}
@@ -168,7 +169,7 @@
 							<a href="/changepassword/{{user.user}}">修改密码</a>
 						</button>
 					</div>
-					{% else %}											
+					{% else %}
  						{% if user.UForbidden %}
  						<input type="button" class="forbidBtn mybutton blue" value="已禁言">
  						{% else %}

@@ -6,7 +6,7 @@
 <form action="." method="POST" enctype="multipart/form-data">
 {% csrf_token %}
 {% load staticfiles %}
-    <p><label for="id_UImage">UImage:</label> <input id="id_UImage" name="UImage" type="file" /></p>
-    <input type="submit" value="Enter">
+    <p><label for="id_UImage">请上传新的头像：</label> <input id="id_UImage" name="UImage" type="file" /></p>
+    <input type="submit" class="mybutton blue" value="确认">
 </form>
 {% endblock %}

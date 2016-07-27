@@ -141,7 +141,7 @@
 							<p class="userimg">
 								{% if miniPost.PUserID.bbsuser.UImage %}
 								{% load staticfiles %}
-								<a href="/personal/{{miniPost.PUserID}}"><img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
+								<a href="/personal/{{miniPost.PUserID}}"><img src="{{miniPost.PUserID.bbsuser.UImage.url}}" alt="Your img"  height="200" width="200"/></a>
 								{% endif %}
 							</p>
 							<p class="user">
@@ -196,7 +196,10 @@
 			{% if forloop.first %}
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
 			{% csrf_token %}
-			{{form.as_p}}
+			<p>
+            <label for="id_PContent">回复本楼：</label>
+            <textarea cols="150" id="id_PContent" name="PContent" rows="1"></textarea>
+            </p>
 			<input type="button" class="save btn btn-default blue mybutton" postid = "{{miniPost.id}}" value="回复">
 			</form>
 			{% endif %}	
@@ -210,7 +213,7 @@
 					<p class="userimg">
 						{% if comPost.PUserID.bbsuser.UImage %}
 						{% load staticfiles %}
-						<a href="/personal/{{comPost.PUserID}}"><img src="{{comPost.PUserID.bbsuser.UImage.url}}" alt="Your img"/></a>
+						<a href="/personal/{{comPost.PUserID}}"><img src="{{comPost.PUserID.bbsuser.UImage.url}}" alt="Your img"  height="200" width="200"/></a>
 						{% endif %}
 					</p>
 					<p class="user">
