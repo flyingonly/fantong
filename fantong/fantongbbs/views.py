@@ -15,6 +15,22 @@ from django.utils import timezone
 import json
 
 
+def search_by_tag(request, inputword):
+    searchs = inputword.split('_')
+    user = request.user.bbsuser
+    posts = BBSPost.objects.filter(PParentID=None).filter(PDelete=False)
+    if len(searchs) == 3:
+        if searchs[0] != '':
+            posts = posts.filter(PTagLocation__TInfo=searchs[0])
+        if searchs[1] != '':
+            posts = posts.filter(PTagClass__TInfo=searchs[1])
+        if searchs[2] != '':
+            posts = posts.filter(PTagPrice__TInfo=searchs[2])
+
+    return render(request, 'multisearch.html', {'posts': posts, 'user': user})
+
+
+
 @csrf_exempt
 def ajax_get_tag(request):
     tags = list(Taginformation.objects.all())

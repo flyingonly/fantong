@@ -20,15 +20,18 @@
                     <input for="id_password" name="password" type="password">
                 </p>
                 <input type="submit" class="mybutton blue" value="{% trans 'Log in' %}" />
-                <input type="hidden" class="mybutton blue" name="next" value="{{ next }}" />
+                
             </form>
             <p>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
+                    <input class="btn btn-default" type="submit" value="登录">
+                </div>
+                <div class="col-lg-4">
                     <button type="button" class="btn btn-default">
                         <a href="{% url 'registration_register' %}">注册</a>
                     </button>   
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <button type="button" class="btn btn-default">
                         <a href="{% url 'index' %}">游客</a>
                     </button>   

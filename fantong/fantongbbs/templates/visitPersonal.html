@@ -17,11 +17,11 @@
             success: function(response, status, xhr) {
                 for (var i = response.length - 1; i >= 0; i--) {
                     if (response[i][0]=="位置") {
-                        $('#taglocation').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#taglocation').append("<li><a href=\"/search_by_tag/" + response[i][1] + "__/\">" + response[i][1] + "</a></li>")
                     }else if (response[i][0]=="菜系") {
-                        $('#tagclass').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#tagclass').append("<li><a href=\"/search_by_tag/_" + response[i][1] + "_/\">" + response[i][1] + "</a></li>")
                     }else{
-                        $('#tagprice').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#tagprice').append("<li><a href=\"/search_by_tag/__" + response[i][1] + "/\">" + response[i][1] + "</a></li>")
                     }
                 }
             }

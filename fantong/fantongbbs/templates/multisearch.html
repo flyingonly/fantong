@@ -1,0 +1,118 @@
+{% extends "indexbase.html" %}
+{% load staticfiles %}
+{% block js %}
+    <script type="text/javascript">
+        $(function() {
+        {% for post in posts %}
+        var s = '{{post.PContent}}'
+        p = s.match(/__url_start__(\S*?)__url_end__/)
+        while (!(p === null)) {
+            s = s.replace(p[0], "<img src='media/" + p[1] + "' />")
+            p = s.match(/__url_start__(\S*?)__url_end__/)
+        }
+        $('#post_{{post.id}}').html(s)
+        {% endfor %}
+        });
+        function play(response) {
+            for (var i = 0; i <= response.length - 1; i++) {
+                if (response[i][0]=="位置") {
+                    $('#PTagLocation').append("<input type=\"radio\" name=\"PTagLocation\" value=\""+response[i][1]+"\">"+response[i][1])
+                }else if (response[i][0]=="菜系") {
+                    $('#PTagClass').append("<input type=\"radio\" name=\"PTagClass\" value=\""+response[i][1]+"\">"+response[i][1])
+                }else{
+                    $('#PTagPrice').append("<input type=\"radio\" name=\"PTagPrice\" value=\""+response[i][1]+"\">"+response[i][1])
+                }
+            }
+            var te = /\/search_by_tag\/.*/
+            var le = /\/.*?_/
+            var ce = /_.*?_/
+            var ans1 = window.location.href.match(te)
+            if (ans1) {
+                taglocation=ans1[0].substr(14).match(le)[0]
+                loc = taglocation.substr(1,taglocation.length-2)
+                if (loc != "") {
+                    loc = decodeURIComponent(loc)
+                    $("input[name='PTagLocation'][value=" + loc + "]").attr("checked","checked");
+                }
+                taglocation=ans1[0].substr(14).match(ce)[0]
+                cla = taglocation.substr(1,taglocation.length-2)
+                if (cla != "") {
+                    cla = decodeURIComponent(cla)
+                    $("input[name='PTagClass'][value=" + cla + "]").attr("checked","checked");
+                }
+                taglocation=ans1[0].substr(14).substr(ans1[0].substr(14).indexOf(taglocation)+taglocation.length-1)
+                pri = taglocation.substr(1,taglocation.length-2)
+                if (pri != "") {
+                    pri = decodeURIComponent(pri)
+                    $("input[name='PTagPrice'][value=" + pri + "]").attr("checked","checked");
+                }
+            }else {
+                alert('发生了一些错误')
+            }
+            $('input:radio[name="PTagLocation"]').change(function (argument) {
+                loc = $('input:radio[name="PTagLocation"]:checked').val()
+                window.location.href = "/search_by_tag/" + loc + "_" + cla + "_" + pri + "/";
+            })
+            $('input:radio[name="PTagClass"]').change(function (argument) {
+                cla = $('input:radio[name="PTagClass"]:checked').val()
+                window.location.href = "/search_by_tag/" + loc + "_" + cla + "_" + pri + "/";
+            })
+            $('input:radio[name="PTagPrice"]').change(function (argument) {
+                pri = $('input:radio[name="PTagPrice"]:checked').val()
+                window.location.href = "/search_by_tag/" + loc + "_" + cla + "_" + pri + "/";
+            })
+        }
+    </script>
+{% endblock %}
+
+{% block title %}搜索结果{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div id="PTagLocation">
+        <input type="radio" name="PTagLocation" value="" checked="checked">无
+    </div>
+    <div id="PTagClass">
+        <input type="radio" name="PTagClass" value="" checked="checked">无
+    </div>
+    <div id="PTagPrice">
+        <input type="radio" name="PTagPrice" value="" checked="checked">无
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <table class="table">
+        <caption>搜索结果</caption>
+            <thead>
+                <tr>
+                    <th class="col-lg-6">帖子标题</th>
+                    <th class="col-lg-3">发帖人</th>
+                    <th class="col-lg-3">发帖时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <th class="col-lg-6">
+                        {%if not post.PParentID %}
+                          <a class="posttitle" href="/bbs_post_detail/{{post.id}}">{{post.PTitle}}</a>
+                        {%else%}
+                        {%if post.PParentID %}
+                        {%if not post.PParentID.PParentID%}
+                          <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.id}}">回复：{{post.PParentID.PTitle}}</a>
+                        {%else%}
+                            <a class="posttitle" href="/bbs_post_detail/{{post.PParentID.PParentID.id}}">回复：回复：{{post.PParentID.PParentID.PTitle}}</a>
+                        {%endif%}
+                        {%endif%}
+                        {%endif%}
+                    </th>
+                    <th class="col-lg-3">{{post.PUserID.UNickname}}</th>
+                    <th class="col-lg-3">{{post.PTime}}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

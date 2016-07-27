@@ -22,15 +22,15 @@
             url: "/ajax_get_tag/",
             type: "GET",
             success: function(response, status, xhr) {
-                for (var i = response.length - 1; i >= 0; i--) {
+                for (var i = 0; i <= response.length - 1; i++) {
                     if (response[i][0]=="位置") {
-                        $('#taglocation').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#taglocation').append("<li><a href=\"/search_by_tag/" + response[i][1] + "__/\">" + response[i][1] + "</a></li>")
                         $("#id_PTagLocation").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
                     }else if (response[i][0]=="菜系") {
-                        $('#tagclass').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#tagclass').append("<li><a href=\"/search_by_tag/_" + response[i][1] + "_/\">" + response[i][1] + "</a></li>")
                         $("#id_PTagClass").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
                     }else{
-                        $('#tagprice').append("<li><a href=\"#\">" + response[i][1] + "</a></li>")
+                        $('#tagprice').append("<li><a href=\"/search_by_tag/__" + response[i][1] + "/\">" + response[i][1] + "</a></li>")
                         $("#id_PTagPrice").append("<option value=\"" + response[i][1] + "\">" + response[i][1] + "</option>")
                     }
                 }
@@ -87,14 +87,15 @@
 				{% else %}
 				<li><a href="/accounts/login">登录</a></li>
 				{% endif %}
-				<form action = "." method = "POST" class="navbar-form" role="search">
-					{% csrf_token %}
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search" name = "search">
-					</div>
-					<button type="submit" class="btn btn-default">搜索</button>
-				</form>
+				
 			</ul>
+            <form action = "." method = "POST" class="navbar-form navbar-right" role="search">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search" name = "search">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
 		</div>
 	</nav>
 	<div class="content">
