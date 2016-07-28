@@ -31,7 +31,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for userFollowPost in userFollowPosts %}
+			{% if userFollowPosts %}
+            {% for userFollowPost in userFollowPosts %}
 				<tr>
 					<th class="col-lg-6">
 						  <a class="posttitle" href="/bbs_post_detail/{{userFollowPost.PostID.id}}">{{userFollowPost.PostID.PTitle}}</a>
@@ -39,6 +40,11 @@
 					<th class="col-lg-3">{{userFollowPost.PostID.PTime}}</th>
 				</tr>
 			{% endfor %}
+            {% else %}
+            <tr>
+            <th class="col-lg-6">无相关搜索结果</th>
+            </tr>
+            {% endif %}
 		</tbody>
 	</table>
 </div>

@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^delete_user_deal/(\w+)/$', views.delete_user_deal),
     url(r'^rank/(\w+)/$', views.rank),
     url(r'^top_post_deal/$', views.top_post_deal),
+    url(r'^forbidden_users/$', views.forbidden_users),
 ]

@@ -31,7 +31,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for post in posts %}
+			{% if posts %}
+            {% for post in posts %}
 				<tr>
 					<th class="col-lg-6">
                         {%if not post.PParentID %}
@@ -49,6 +50,11 @@
 					<th class="col-lg-3">{{post.PTime}}</th>
 				</tr>
 			{% endfor %}
+            {% else %}
+            <tr>
+            <th class="col-lg-6">无相关搜索结果</th>
+            </tr>
+            {% endif %}
 		</tbody>
 	</table>
 </div>

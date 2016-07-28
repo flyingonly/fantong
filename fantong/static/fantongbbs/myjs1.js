@@ -31,7 +31,7 @@ $(function() {
             processData: false,
             contentType: false,
             success: function(data, textStatus) {
-                $("form textarea").val($("form textarea").val() + "__url_start__" + data + "__url_end__")
+                $("#id_PContent").val($("#id_PContent").val() + "__url_start__" + data + "__url_end__")
                 alert("上传成功")
             }
         });
@@ -50,7 +50,7 @@ $(function() {
             contentType: false,
             success: function(data, textStatus) {
                 for (var i = data.length - 1; i >= 0; i--) {
-                    $("form textarea").val($("form textarea").val() + "__data_start__" + data[i] + "__data_end__")
+                    $("#id_PContent").val($("#id_PContent").val() + "__data_start__" + data[i] + "__data_end__")
                     alert("上传成功")
                 }
             }

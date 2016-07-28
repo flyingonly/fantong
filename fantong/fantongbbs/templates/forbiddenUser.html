@@ -1,0 +1,54 @@
+{% extends "indexbase.html" %}
+{% load staticfiles %}
+	{% block js %}
+    <script type="text/javascript">
+    	$(function() {
+    	{% for post in posts %}
+    	var s = '{{post.PContent}}'
+    	p = s.match(/__url_start__(\S*?)__url_end__/)
+    	while (!(p === null)) {
+    		s = s.replace(p[0], "<img src='media/" + p[1] + "' />")
+    		p = s.match(/__url_start__(\S*?)__url_end__/)
+    	}
+    	$('#post_{{post.id}}').html(s)
+        if (!('{{post.PKeywords}}' === '')) {
+            $('#keyword_{{post.id}} td').html('关键词：' + $.trim('{{post.PKeywords}}').replace(/\s+/g,','))
+        }
+    	{% endfor %}
+    });
+    </script>
+{% endblock %}
+
+{% block title %}小黑屋{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <caption>搜索结果</caption>
+            <thead>
+                <tr>
+                    <th class="col-lg-6">用户名</th>
+                    <th class="col-lg-3">发帖数</th>
+                    <th class="col-lg-3">状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for forbiddenUser in forbiddenUsers %}
+                <tr>
+                    <th class="col-lg-6"><a href="/personal/{{forbiddenUser.user}}/">{{forbiddenUser.UNickname}}</a></th>
+                    <th class="col-lg-3">{{forbiddenUser.UPostNum}}</th>
+                    <th class="col-lg-3">
+                        {% if forbiddenUser.UForbidden %}
+                        禁言中
+                        {% else %}
+                        正常
+                        {% endif %}
+                    </th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -14,7 +14,7 @@
         },
     });
     </script>
-    <script type="text/javascript" src="{% static "fantongbbs/myjs.js" %}">
+    <script type="text/javascript" src="{% static "fantongbbs/myjs1.js" %}">
 	</script>
     <script type="text/javascript">
     $(function () {
@@ -91,7 +91,7 @@
                     <li><a href="/rank/reply">回复数排行</a></li>
                     </ul>
                 </li>
-				<li><a href="#">小黑屋圈</a></li>
+				<li><a href="/forbidden_users/">小黑屋圈</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				{% if user.user.is_authenticated %}

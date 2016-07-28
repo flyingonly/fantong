@@ -22,37 +22,34 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <table class="table">
-            <caption>搜索结果</caption>
-            <thead>
-                <tr>
-                    <th class="col-lg-6">用户名</th>
-                    <th class="col-lg-3">发帖数</th>
-                    <th class="col-lg-3">状态</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if userFollowUsers %}
-                {% for userFollowUser in userFollowUsers %}
-                <tr>
-                    <th class="col-lg-6"><a href="/personal/{{userFollowUser.User2ID}}/">{{userFollowUser.User2ID.bbsuser.UNickname}}</a></th>
-                    <th class="col-lg-3">{{userFollowUser.User2ID.bbsuser.UPostNum}}</th>
-                    <th class="col-lg-3">
-                        {% if userFollowUser.UForbidden %}
-                        禁言中
-                        {% else %}
-                        正常
-                        {% %}
-                    </th>
-                </tr>
-                {% endfor %}
+<table class="table">
+    <thead>
+        <tr>
+            <th class="col-lg-6">用户名</th>
+            <th class="col-lg-3">发帖数</th>
+            <th class="col-lg-3">状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if userFollowUsers %}
+        {% for userFollowUser in userFollowUsers %}
+        <tr>
+            <th class="col-lg-6"><a href="/personal/{{userFollowUser.User2ID}}/">{{userFollowUser.User2ID.bbsuser.UNickname}}</a></th>
+            <th class="col-lg-3">{{userFollowUser.User2ID.bbsuser.UPostNum}}</th>
+            <th class="col-lg-3">
+                {% if userFollowUser.User2ID.bbsuser.UForbidden %}
+                禁言中
                 {% else %}
-                无相关搜索结果
+                正常
                 {% endif %}
-            </tbody>
-        </table>
-    </div>
-</div>
+            </th>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+        <th class="col-lg-6">无相关搜索结果</th>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
 {% endblock %}

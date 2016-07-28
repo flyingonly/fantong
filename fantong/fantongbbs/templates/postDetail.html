@@ -7,8 +7,7 @@
         {% for comPost in posts %}
         {% if not forloop.first %}
             {% for miniPost in comPost %}
-                var s = {{miniPost.PContent|safe }}
-                
+                var s = '{{miniPost.PContent|safe}}'
                 p = s.match(/__url_start__(\S*?)__url_end__/)
                 while (!(p === null)) {
                     s = s.replace(p[0], "<img src='{{BASE_DIR}}/media/" + p[1] + "' />")
@@ -237,8 +236,8 @@
 			<form method="POST" class="post-form" postid = "{{miniPost.id}}">
 			{% csrf_token %}
 			<p>
-            <label for="id_PContent">回复本楼：</label>
-            <textarea cols="150" id="id_PContent" name="PContent" rows="1"></textarea>
+            <label for="PContent">回复本楼：</label>
+            <textarea cols="150" id="PContent" name="PContent" rows="1"></textarea>
             </p>
 			<input type="button" class="save btn btn-default blue mybutton" postid = "{{miniPost.id}}" value="回复">
 			</form>

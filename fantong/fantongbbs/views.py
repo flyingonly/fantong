@@ -131,6 +131,14 @@ def update_time(request):
     return HttpResponseRedirect('/personal/' + request.user.username)
 
 
+def forbidden_users(request):
+    if request.user.is_anonymous():
+        user = None
+    else:
+        user = request.user.bbsuser
+    forbiddenUsers = BBSUser.objects.filter(UForbidden=True)
+    return render(request, 'forbiddenUser.html', {'forbiddenUsers': forbiddenUsers, 'user': user})
+
 @csrf_exempt
 def top_post_deal(request):
     post = BBSPost.objects.get(id=int(request.POST['postID']))
@@ -156,6 +164,10 @@ def bbs_list(request):
         post = form.save(commit=False)
         post.PUserID = request.user
         request.user.bbsuser.UPostNum += 1
+        if form.cleaned_data['PTitle'].replace("\r\n","").replace(" ","") == "":
+            post.PTitle = "未命名"
+        else:
+            post.PTitle = form.cleaned_data['PTitle'].replace("\r\n"," ")
         post.PContent = form.cleaned_data['PContent'].replace("\r\n","<br>")
         post.PTagLocation = Taginformation.objects.filter(TClass='位置').get(TInfo=request.POST['PTagLocation'])
         post.PTagClass = Taginformation.objects.filter(TClass='菜系').get(TInfo=request.POST['PTagClass'])
