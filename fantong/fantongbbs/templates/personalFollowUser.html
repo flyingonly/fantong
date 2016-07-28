@@ -1,6 +1,6 @@
 ﻿{% extends "personalbase.html" %}
 
-{% block title %}{{user.user.username}}的个人主页{% endblock %}
+{% block title %}{{user.UNickname}}的个人主页{% endblock %}
 
 {% block js %}
     <script type="text/javascript">
@@ -34,15 +34,23 @@
                 </tr>
             </thead>
             <tbody>
+                {% if userFollowUsers %}
                 {% for userFollowUser in userFollowUsers %}
                 <tr>
                     <th class="col-lg-6"><a href="/personal/{{userFollowUser.User2ID}}/">{{userFollowUser.User2ID.bbsuser.UNickname}}</a></th>
                     <th class="col-lg-3">{{userFollowUser.User2ID.bbsuser.UPostNum}}</th>
                     <th class="col-lg-3">
-                        123
+                        {% if userFollowUser.UForbidden %}
+                        禁言中
+                        {% else %}
+                        正常
+                        {% %}
                     </th>
                 </tr>
                 {% endfor %}
+                {% else %}
+                无相关搜索结果
+                {% endif %}
             </tbody>
         </table>
     </div>

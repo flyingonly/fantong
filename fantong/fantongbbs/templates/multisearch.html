@@ -106,6 +106,7 @@
                 </tr>
             </thead>
             <tbody>
+                {% if posts %}
                 {% for post in posts %}
                 <tr>
                     <th class="col-lg-6">
@@ -125,6 +126,9 @@
                     <th class="col-lg-3">{{post.PTime}}</th>
                 </tr>
                 {% endfor %}
+                {% else %}
+                无相关搜索结果
+                {% endif %}
             </tbody>
         </table>
     </div>
