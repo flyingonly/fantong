@@ -16,15 +16,23 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for user in users %}
+				{% if users %}
+                {% for user in users %}
 				<tr>
 					<th class="col-lg-6"><a href="{%url 'personal' user.user%}">{{user.UNickname}}</a></th>
 					<th class="col-lg-3">{{user.UPostNum}}</th>
 					<th class="col-lg-3">
-						123
+						{% if user.UForbidden %}
+                        禁言中
+                        {% else %}
+                        正常
+                        {% %}
 					</th>
 				</tr>
 				{% endfor %}
+                {% else %}
+                无相关搜索结果
+                {% endif %}
 			</tbody>
 		</table>
 	</div>
